@@ -1,0 +1,11 @@
+*.stash
+*.APS
+*.pro
+*.user
+*.sln
+*.vcxproj
+*.filters
+.vs/**
+debug/**
+release/**
+
