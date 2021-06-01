@@ -9,6 +9,7 @@ mainWindow::mainWindow(QWidget* parent)
 
     QObject::connect(ui->actionAdd_Team, &QAction::triggered, &handler, &actionHandler::newTeam); //connecting various signals to their
     QObject::connect(ui->actionAdd_Match, &QAction::triggered, &handler, &actionHandler::newMatch);//appropriate slot on actionHandler
+    QObject::connect(ui->actionAbout, &QAction::triggered, &handler, &actionHandler::onAbout);
     
 }
 

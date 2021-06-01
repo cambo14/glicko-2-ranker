@@ -11,6 +11,7 @@ public:
 public slots:
 	void newTeam();	//a slot to run when an action that results in a new team being created is performed
 	void newMatch(); //a slot to run when an action that results in a new match being created is performed
+	void onAbout(); //a slot to run when an action that results in an about dialog box showing up is performed
 };
 
 #endif
