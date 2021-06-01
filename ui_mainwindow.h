@@ -12,6 +12,7 @@
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
@@ -19,6 +20,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -40,8 +42,7 @@ public:
     QAction *actionAdd_Match;
     QAction *actionRank;
     QWidget *centralwidget;
-    QHBoxLayout *horizontalLayout_2;
-    QHBoxLayout *mainLay;
+    QHBoxLayout *horizontalLayout_5;
     QListWidget *teamList;
     QVBoxLayout *infoLay;
     QHBoxLayout *sysInfoLay;
@@ -82,7 +83,20 @@ public:
     QLabel *matDrawnLabel;
     QLabel *matDrawnView;
     QChartView *rateHistoryView;
+    QVBoxLayout *verticalLayout;
+    QPushButton *calcRankButton;
     QListWidget *matchList;
+    QVBoxLayout *verticalLayout_2;
+    QLabel *matchNum;
+    QHBoxLayout *horizontalLayout;
+    QLabel *team1Label;
+    QComboBox *team1Combo;
+    QHBoxLayout *horizontalLayout_3;
+    QLabel *team2Label;
+    QComboBox *team2Combo;
+    QHBoxLayout *horizontalLayout_4;
+    QLabel *resultLabel;
+    QComboBox *resultCombo;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuEdit;
@@ -95,7 +109,7 @@ public:
     {
         if (mainWindow->objectName().isEmpty())
             mainWindow->setObjectName(QString::fromUtf8("mainWindow"));
-        mainWindow->resize(790, 600);
+        mainWindow->resize(974, 600);
         actionOpen = new QAction(mainWindow);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
         actionSave = new QAction(mainWindow);
@@ -118,17 +132,15 @@ public:
         actionRank->setObjectName(QString::fromUtf8("actionRank"));
         centralwidget = new QWidget(mainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-        horizontalLayout_2 = new QHBoxLayout(centralwidget);
-        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
-        mainLay = new QHBoxLayout();
-        mainLay->setObjectName(QString::fromUtf8("mainLay"));
+        horizontalLayout_5 = new QHBoxLayout(centralwidget);
+        horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
         teamList = new QListWidget(centralwidget);
         teamList->setObjectName(QString::fromUtf8("teamList"));
         teamList->setEnabled(true);
         teamList->setSizeIncrement(QSize(1, 3));
         teamList->setBaseSize(QSize(1, 3));
 
-        mainLay->addWidget(teamList);
+        horizontalLayout_5->addWidget(teamList);
 
         infoLay = new QVBoxLayout();
         infoLay->setObjectName(QString::fromUtf8("infoLay"));
@@ -392,23 +404,90 @@ public:
         infoLay->setStretch(0, 2);
         infoLay->setStretch(1, 3);
 
-        mainLay->addLayout(infoLay);
+        horizontalLayout_5->addLayout(infoLay);
+
+        verticalLayout = new QVBoxLayout();
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        calcRankButton = new QPushButton(centralwidget);
+        calcRankButton->setObjectName(QString::fromUtf8("calcRankButton"));
+        calcRankButton->setMinimumSize(QSize(0, 70));
+        QFont font2;
+        font2.setPointSize(20);
+        calcRankButton->setFont(font2);
+
+        verticalLayout->addWidget(calcRankButton);
 
         matchList = new QListWidget(centralwidget);
         matchList->setObjectName(QString::fromUtf8("matchList"));
 
-        mainLay->addWidget(matchList);
+        verticalLayout->addWidget(matchList);
 
-        mainLay->setStretch(0, 1);
-        mainLay->setStretch(1, 3);
-        mainLay->setStretch(2, 1);
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        matchNum = new QLabel(centralwidget);
+        matchNum->setObjectName(QString::fromUtf8("matchNum"));
+        QFont font3;
+        font3.setPointSize(12);
+        matchNum->setFont(font3);
+        matchNum->setAlignment(Qt::AlignCenter);
 
-        horizontalLayout_2->addLayout(mainLay);
+        verticalLayout_2->addWidget(matchNum);
+
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        team1Label = new QLabel(centralwidget);
+        team1Label->setObjectName(QString::fromUtf8("team1Label"));
+
+        horizontalLayout->addWidget(team1Label);
+
+        team1Combo = new QComboBox(centralwidget);
+        team1Combo->setObjectName(QString::fromUtf8("team1Combo"));
+
+        horizontalLayout->addWidget(team1Combo);
+
+
+        verticalLayout_2->addLayout(horizontalLayout);
+
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+        team2Label = new QLabel(centralwidget);
+        team2Label->setObjectName(QString::fromUtf8("team2Label"));
+
+        horizontalLayout_3->addWidget(team2Label);
+
+        team2Combo = new QComboBox(centralwidget);
+        team2Combo->setObjectName(QString::fromUtf8("team2Combo"));
+
+        horizontalLayout_3->addWidget(team2Combo);
+
+
+        verticalLayout_2->addLayout(horizontalLayout_3);
+
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+        resultLabel = new QLabel(centralwidget);
+        resultLabel->setObjectName(QString::fromUtf8("resultLabel"));
+
+        horizontalLayout_4->addWidget(resultLabel);
+
+        resultCombo = new QComboBox(centralwidget);
+        resultCombo->setObjectName(QString::fromUtf8("resultCombo"));
+
+        horizontalLayout_4->addWidget(resultCombo);
+
+
+        verticalLayout_2->addLayout(horizontalLayout_4);
+
+
+        verticalLayout->addLayout(verticalLayout_2);
+
+
+        horizontalLayout_5->addLayout(verticalLayout);
 
         mainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(mainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 790, 22));
+        menubar->setGeometry(QRect(0, 0, 974, 22));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuEdit = new QMenu(menubar);
@@ -479,6 +558,11 @@ public:
         matLostView->setText(QCoreApplication::translate("mainWindow", "12", nullptr));
         matDrawnLabel->setText(QCoreApplication::translate("mainWindow", "Matches Drawn:", nullptr));
         matDrawnView->setText(QCoreApplication::translate("mainWindow", "1", nullptr));
+        calcRankButton->setText(QCoreApplication::translate("mainWindow", "RANK", nullptr));
+        matchNum->setText(QCoreApplication::translate("mainWindow", "Match NULL", nullptr));
+        team1Label->setText(QCoreApplication::translate("mainWindow", "Team 1:", nullptr));
+        team2Label->setText(QCoreApplication::translate("mainWindow", "Team 2:", nullptr));
+        resultLabel->setText(QCoreApplication::translate("mainWindow", "Result:", nullptr));
         menuFile->setTitle(QCoreApplication::translate("mainWindow", "File", nullptr));
         menuEdit->setTitle(QCoreApplication::translate("mainWindow", "Edit", nullptr));
         menuHelp->setTitle(QCoreApplication::translate("mainWindow", "Help", nullptr));
