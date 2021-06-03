@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "actionHandler.h"
+#include "glicko2TeamSet.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class mainWindow; }
@@ -13,6 +14,7 @@ class mainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    glicko2TeamSet *teamSet;
     mainWindow(QWidget *parent = nullptr);
     ~mainWindow();
 

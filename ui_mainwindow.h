@@ -14,9 +14,10 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
-#include <QtWidgets/QListWidget>
+#include <QtWidgets/QListView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
@@ -25,6 +26,7 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "QtCharts"
+#include "matchListTable.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -43,7 +45,7 @@ public:
     QAction *actionRank;
     QWidget *centralwidget;
     QHBoxLayout *horizontalLayout_5;
-    QListWidget *teamList;
+    QListView *teamList;
     QVBoxLayout *infoLay;
     QHBoxLayout *sysInfoLay;
     QVBoxLayout *sysValLay;
@@ -85,7 +87,7 @@ public:
     QChartView *rateHistoryView;
     QVBoxLayout *verticalLayout;
     QPushButton *calcRankButton;
-    QListWidget *matchList;
+    matchListTable *matchList;
     QVBoxLayout *verticalLayout_2;
     QLabel *matchNum;
     QHBoxLayout *horizontalLayout;
@@ -134,9 +136,10 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         horizontalLayout_5 = new QHBoxLayout(centralwidget);
         horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
-        teamList = new QListWidget(centralwidget);
+        teamList = new QListView(centralwidget);
         teamList->setObjectName(QString::fromUtf8("teamList"));
         teamList->setEnabled(true);
+        teamList->setMaximumSize(QSize(200, 16777215));
         teamList->setSizeIncrement(QSize(1, 3));
         teamList->setBaseSize(QSize(1, 3));
 
@@ -417,8 +420,28 @@ public:
 
         verticalLayout->addWidget(calcRankButton);
 
-        matchList = new QListWidget(centralwidget);
+        matchList = new matchListTable(centralwidget);
+        if (matchList->columnCount() < 1)
+            matchList->setColumnCount(1);
+        if (matchList->rowCount() < 1)
+            matchList->setRowCount(1);
         matchList->setObjectName(QString::fromUtf8("matchList"));
+        matchList->setMinimumSize(QSize(200, 0));
+        matchList->setMaximumSize(QSize(200, 16777215));
+        matchList->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        matchList->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+        matchList->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+        matchList->setShowGrid(false);
+        matchList->setRowCount(1);
+        matchList->setColumnCount(1);
+        matchList->horizontalHeader()->setVisible(false);
+        matchList->horizontalHeader()->setHighlightSections(true);
+        matchList->horizontalHeader()->setStretchLastSection(true);
+        matchList->verticalHeader()->setVisible(false);
+        matchList->verticalHeader()->setCascadingSectionResizes(true);
+        matchList->verticalHeader()->setMinimumSectionSize(45);
+        matchList->verticalHeader()->setDefaultSectionSize(45);
+        matchList->verticalHeader()->setStretchLastSection(false);
 
         verticalLayout->addWidget(matchList);
 
@@ -484,6 +507,7 @@ public:
 
         horizontalLayout_5->addLayout(verticalLayout);
 
+        horizontalLayout_5->setStretch(1, 4);
         mainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(mainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
