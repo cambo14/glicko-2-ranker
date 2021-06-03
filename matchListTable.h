@@ -16,12 +16,12 @@ class matchListTable : public QTableWidget
 	Q_OBJECT
 
 public:
-	glicko2TeamSet* matchList;
-
+	glicko2TeamSet* matchList = nullptr;
 	QPushButton addMatchButton;
 
-	void init(glicko2TeamSet* matchLi); //init function due to not being able to use custom constructors for promoted classes with qt designer
-										//make sure to call this ASAP
+	void init(glicko2TeamSet* matchLi); /*init function due to not being able to use custom constructors for promoted classes with 
+										qt designer make sure to call this ASAP*/
+
 	matchListTable(QWidget *parent = Q_NULLPTR);
 	~matchListTable();
 

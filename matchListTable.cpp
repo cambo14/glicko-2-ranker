@@ -8,10 +8,9 @@ void matchListTable::init(glicko2TeamSet* matchLi)
 }
 
 matchListTable::matchListTable(QWidget* parent)
-	: QTableWidget(1, 1, parent), addMatchButton(QString("ADD TEAM +"), this)
+	: QTableWidget(1, 1, parent), addMatchButton(QString("ADD MATCH +"), this)
 {
 	setCellWidget(0, 0, &addMatchButton);
-	matchList = nullptr;
 }
 
 matchListTable::~matchListTable()

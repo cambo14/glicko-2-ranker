@@ -17,7 +17,6 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
-#include <QtWidgets/QListView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
@@ -27,6 +26,7 @@
 #include <QtWidgets/QWidget>
 #include "QtCharts"
 #include "matchListTable.h"
+#include "teamListTable.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -45,7 +45,7 @@ public:
     QAction *actionRank;
     QWidget *centralwidget;
     QHBoxLayout *horizontalLayout_5;
-    QListView *teamList;
+    teamListTable *teamList;
     QVBoxLayout *infoLay;
     QHBoxLayout *sysInfoLay;
     QVBoxLayout *sysValLay;
@@ -136,12 +136,24 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         horizontalLayout_5 = new QHBoxLayout(centralwidget);
         horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
-        teamList = new QListView(centralwidget);
+        teamList = new teamListTable(centralwidget);
+        if (teamList->columnCount() < 1)
+            teamList->setColumnCount(1);
+        if (teamList->rowCount() < 1)
+            teamList->setRowCount(1);
         teamList->setObjectName(QString::fromUtf8("teamList"));
         teamList->setEnabled(true);
         teamList->setMaximumSize(QSize(200, 16777215));
         teamList->setSizeIncrement(QSize(1, 3));
         teamList->setBaseSize(QSize(1, 3));
+        teamList->setShowGrid(false);
+        teamList->setRowCount(1);
+        teamList->setColumnCount(1);
+        teamList->horizontalHeader()->setVisible(false);
+        teamList->horizontalHeader()->setStretchLastSection(true);
+        teamList->verticalHeader()->setVisible(false);
+        teamList->verticalHeader()->setMinimumSectionSize(45);
+        teamList->verticalHeader()->setDefaultSectionSize(45);
 
         horizontalLayout_5->addWidget(teamList);
 

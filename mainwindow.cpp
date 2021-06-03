@@ -7,6 +7,7 @@ mainWindow::mainWindow(QWidget* parent)
 {
     ui->setupUi(this);              //initialise various ui components
     ui->matchList->init(teamSet);
+    ui->teamList->init(teamSet);
 
     QObject::connect(ui->actionAdd_Team, &QAction::triggered, &handler, &actionHandler::newTeam); //connecting various signals to their
     QObject::connect(ui->actionAdd_Match, &QAction::triggered, &handler, &actionHandler::newMatch);//appropriate slot on actionHandler
