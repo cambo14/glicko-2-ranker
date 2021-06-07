@@ -2,6 +2,7 @@
 #define _GLICKO2TEAMSET_H_
 
 #include <vector>
+#include <iostream>
 #include "match.h"
 
 /*
@@ -15,7 +16,9 @@
 class glicko2TeamSet
 {
 public:
-	std::vector<match> matchSet;
+	std::string test;
+	//std::vector<match> matchSet;
+	glicko2TeamSet(std::string testVal);
 };
 
 #endif

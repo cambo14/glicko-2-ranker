@@ -3,6 +3,7 @@
 
 #include <QTableWidget>
 #include <QPushButton>
+#include <memory>
 #include "glicko2TeamSet.h"
 
 /*
@@ -15,10 +16,10 @@ class teamListTable : public QTableWidget
 	Q_OBJECT
 public:
 	QPushButton addTeamButton;
-	glicko2TeamSet* teamList = nullptr;
+	std::shared_ptr<glicko2TeamSet> teamList = nullptr;
 
 	teamListTable(QWidget* parent = Q_NULLPTR);
-	void init(glicko2TeamSet* teamLi); /*init function due to not being able to use custom constructors for promoted classes with 
+	void init(std::shared_ptr<glicko2TeamSet> teamLi); /*init function due to not being able to use custom constructors for promoted classes with 
 										qt designer make sure to call this ASAP*/
 };
 

@@ -1,7 +1,7 @@
 #include "matchListTable.h"
 #include <QString>
 
-void matchListTable::init(glicko2TeamSet* matchLi)
+void matchListTable::init(std::shared_ptr<glicko2TeamSet> matchLi)
 {
 	matchList = matchLi;
 	setRowCount(20);	//TODO replace with number of matches from vector in the teamset

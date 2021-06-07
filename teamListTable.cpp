@@ -4,7 +4,7 @@ teamListTable::teamListTable(QWidget* parent) : QTableWidget(1, 1, parent), addT
 	setCellWidget(0, 0, &addTeamButton);
 }
 
-void teamListTable::init(glicko2TeamSet* teamLi)
+void teamListTable::init(std::shared_ptr<glicko2TeamSet> teamLi)
 {
 	teamList = teamLi;
 }

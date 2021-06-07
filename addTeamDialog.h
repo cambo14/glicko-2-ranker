@@ -12,11 +12,14 @@ class addTeamDialog : public QDialog
 	Q_OBJECT
 
 public:
-	addTeamDialog(QWidget *parent = Q_NULLPTR);
+	addTeamDialog(QWidget *par = Q_NULLPTR);
 	~addTeamDialog();
 
-private:
 	Ui::addTeamDialog ui;
+public slots:
+	void addButtonPressed();		// a slot to run when the add team button is pressed
+signals:
+	void teamSubmitted(std::string teamname, float rating, float RD);	//a signal to emit with the values of the newly created team
 };
 
 #endif

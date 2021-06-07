@@ -43,6 +43,7 @@ public:
     QAction *actionMatches;
     QAction *actionAdd_Match;
     QAction *actionRank;
+    QAction *actionNew;
     QWidget *centralwidget;
     QHBoxLayout *horizontalLayout_5;
     teamListTable *teamList;
@@ -132,6 +133,8 @@ public:
         actionAdd_Match->setObjectName(QString::fromUtf8("actionAdd_Match"));
         actionRank = new QAction(mainWindow);
         actionRank->setObjectName(QString::fromUtf8("actionRank"));
+        actionNew = new QAction(mainWindow);
+        actionNew->setObjectName(QString::fromUtf8("actionNew"));
         centralwidget = new QWidget(mainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         horizontalLayout_5 = new QHBoxLayout(centralwidget);
@@ -545,6 +548,7 @@ public:
         menubar->addAction(menuTeams->menuAction());
         menubar->addAction(menuMatches->menuAction());
         menuFile->addAction(actionOpen);
+        menuFile->addAction(actionNew);
         menuFile->addAction(actionSave);
         menuFile->addAction(actionSave_As);
         menuEdit->addAction(actionSystem_Constant);
@@ -573,6 +577,7 @@ public:
         actionMatches->setText(QCoreApplication::translate("mainWindow", "Matches", nullptr));
         actionAdd_Match->setText(QCoreApplication::translate("mainWindow", "Add Match", nullptr));
         actionRank->setText(QCoreApplication::translate("mainWindow", "Rank", nullptr));
+        actionNew->setText(QCoreApplication::translate("mainWindow", "New", nullptr));
         numTeamsLabel->setText(QCoreApplication::translate("mainWindow", "Number of Teams:", nullptr));
         numTeamsView->setText(QCoreApplication::translate("mainWindow", "32", nullptr));
         numMatchesLabel->setText(QCoreApplication::translate("mainWindow", "Number of Matches Complete:", nullptr));
