@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include "match.h"
+#include "team.h"
 
 /*
 * A class to handle all the information and
@@ -17,8 +18,12 @@ class glicko2TeamSet
 {
 public:
 	std::string test;
-	//std::vector<match> matchSet;
+	std::vector<match> matchSet;
+	std::vector<team> teamSet;
+
 	glicko2TeamSet(std::string testVal);
+
+	void addTeam(std::string name, float rating, float RD);
 };
 
 #endif
