@@ -21,6 +21,8 @@ public:
 	teamListTable(QWidget* parent = Q_NULLPTR);
 	void init(std::shared_ptr<glicko2TeamSet> teamLi); /*init function due to not being able to use custom constructors for promoted classes with 
 										qt designer make sure to call this ASAP*/
+public slots:
+	void teamAdded(size_t teamIndex); //a slot to run to add a team to the table
 };
 
 #endif

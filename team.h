@@ -10,6 +10,10 @@ class team
 {
 public:
 	team(std::string nam, float ratin, float R);
+
+	std::string name;
+	float rating;
+	float RD;
 };
 
 #endif
