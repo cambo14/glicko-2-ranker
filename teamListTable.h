@@ -1,3 +1,6 @@
+//Copyright(C) 2021 Campbell Rowland
+//see license file for more information
+
 #ifndef _TEAMLISTTABLE_H_
 #define _TEAMLISTTABLE_H_
 
