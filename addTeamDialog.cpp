@@ -6,7 +6,7 @@ addTeamDialog::addTeamDialog(QWidget *par)
 	: QDialog(par)
 {
 	ui.setupUi(this);
-	QAction::connect(this->ui.addTeamButton, QPushButton::released, this, addTeamDialog::addButtonPressed);
+	QAction::connect(this->ui.addTeamButton, &QPushButton::released, this, &addTeamDialog::addButtonPressed);
 }
 
 addTeamDialog::~addTeamDialog()

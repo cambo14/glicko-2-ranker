@@ -6,6 +6,7 @@ mainWindow::mainWindow(QWidget* parent)
     , ui(new Ui::mainWindow), handler(this, teamSet)
 {
     teamSet = std::make_shared<glicko2TeamSet>("mainWInd");
+    handler.teamSet = teamSet;
 
     ui->setupUi(this);              //initialise various ui components
     ui->matchList->init(teamSet);
@@ -16,6 +17,7 @@ mainWindow::mainWindow(QWidget* parent)
     QObject::connect(ui->actionAdd_Match, &QAction::triggered, &handler, &actionHandler::newMatch);//appropriate slot on actionHandler
     QObject::connect(ui->actionAbout, &QAction::triggered, &handler, &actionHandler::onAbout);
     QObject::connect(ui->actionNew, &QAction::triggered, &handler, &actionHandler::onNew);
+    QObject::connect(&handler, &actionHandler::teamCreated, ui->teamList, &teamListTable::teamAdded);
 
     
 }

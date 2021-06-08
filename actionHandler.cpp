@@ -13,7 +13,7 @@ actionHandler::actionHandler(QWidget* par, std::shared_ptr<glicko2TeamSet> tS) {
 
 void actionHandler::newTeam() {
 	addTeamDialog addTeam(parent);
-	QObject::connect(&addTeam, &addTeamDialog::teamSubmitted, this, &actionHandler::newMatchAdded); //connect the new team dialog to the handler
+	QObject::connect(&addTeam, &addTeamDialog::teamSubmitted, this, &actionHandler::newTeamAdded); //connect the new team dialog to the handler
 	addTeam.exec();
 }
 
@@ -35,6 +35,8 @@ void actionHandler::onNew()
 	teamSet = std::make_shared<glicko2TeamSet>("actionHandler");
 }
 
-void actionHandler::newMatchAdded(std::string teamname, float rating, float RD)
+void actionHandler::newTeamAdded(std::string teamName, float rating, float RD)
 {
+	teamSet->teamSet.push_back(team(teamName, rating, RD));
+	emit teamCreated(teamSet->teamSet.size() - 1);
 }

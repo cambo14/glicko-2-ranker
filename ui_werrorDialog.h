@@ -68,6 +68,7 @@ public:
         werrorImg = new QLabel(layoutWidget);
         werrorImg->setObjectName(QString::fromUtf8("werrorImg"));
         werrorImg->setMaximumSize(QSize(100, 100));
+        werrorImg->setPixmap(QPixmap(QString::fromUtf8(":/resources/warning.png")));
         werrorImg->setScaledContents(true);
 
         infoImgLay->addWidget(werrorImg);
@@ -127,7 +128,7 @@ public:
 
     void retranslateUi(QDialog *werrorDialog)
     {
-        werrorDialog->setWindowTitle(QCoreApplication::translate("werrorDialog", "werrorDialog", nullptr));
+        werrorDialog->setWindowTitle(QCoreApplication::translate("werrorDialog", "Warning", nullptr));
         werrorTitle->setText(QCoreApplication::translate("werrorDialog", "WERROR TITLE", nullptr));
         werrorImg->setText(QString());
         werrorCap->setText(QCoreApplication::translate("werrorDialog", "WERROR TYPE GOES HERE", nullptr));

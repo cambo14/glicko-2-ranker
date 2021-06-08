@@ -113,6 +113,7 @@ public:
         if (mainWindow->objectName().isEmpty())
             mainWindow->setObjectName(QString::fromUtf8("mainWindow"));
         mainWindow->resize(974, 600);
+        mainWindow->setAutoFillBackground(false);
         actionOpen = new QAction(mainWindow);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
         actionSave = new QAction(mainWindow);

@@ -7,6 +7,13 @@ teamListTable::teamListTable(QWidget* parent) : QTableWidget(1, 1, parent), addT
 	setCellWidget(0, 0, &addTeamButton);
 }
 
+teamListTable::~teamListTable()
+{
+	for (size_t i = 0; i < infoWidgets.size(); i++) {
+		delete infoWidgets[i];
+	}
+}
+
 void teamListTable::init(std::shared_ptr<glicko2TeamSet> teamLi)
 {
 	teamList = teamLi;
@@ -14,5 +21,8 @@ void teamListTable::init(std::shared_ptr<glicko2TeamSet> teamLi)
 
 
 void teamListTable::teamAdded(size_t teamIndex) {
-
+	setRowCount(rowCount()+1);
+	infoWidgets.push_back(new teamListTableItem(teamList, teamIndex, this));
+	infoWidgets[teamIndex]->show();
+	setCellWidget(rowCount() - 1, 0, infoWidgets[teamIndex]);
 }

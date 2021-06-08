@@ -6,8 +6,7 @@
 
 #include <QTableWidget>
 #include <QPushButton>
-#include <memory>
-#include "glicko2TeamSet.h"
+#include "teamListTableItem.h"
 
 /*
 * A class to handle the list of teams on the right hand side of the main window
@@ -19,9 +18,13 @@ class teamListTable : public QTableWidget
 	Q_OBJECT
 public:
 	QPushButton addTeamButton;
+	std::vector<teamListTableItem*> infoWidgets;
+
 	std::shared_ptr<glicko2TeamSet> teamList = nullptr;
 
 	teamListTable(QWidget* parent = Q_NULLPTR);
+	~teamListTable();
+
 	void init(std::shared_ptr<glicko2TeamSet> teamLi); /*init function due to not being able to use custom constructors for promoted classes with 
 										qt designer make sure to call this ASAP*/
 public slots:
