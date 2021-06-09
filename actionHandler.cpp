@@ -1,3 +1,6 @@
+//Copyright(C) 2021 Campbell Rowland
+//see license file for more information
+
 #include "actionHandler.h"
 #include "addTeamDialog.h"
 #include "addMatchDialog.h"
@@ -15,6 +18,7 @@ void actionHandler::newTeam() {
 	addTeamDialog addTeam(parent);
 	QObject::connect(&addTeam, &addTeamDialog::teamSubmitted, this, &actionHandler::newTeamAdded); //connect the new team dialog to the handler
 	addTeam.exec();
+	addTeam.deleteLater();
 }
 
 

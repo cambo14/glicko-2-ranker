@@ -5,6 +5,7 @@
 
 teamListTable::teamListTable(QWidget* parent) : QTableWidget(1, 1, parent), addTeamButton(QString("+ ADD TEAM"), this) {
 	setCellWidget(0, 0, &addTeamButton);
+	QObject::connect(&addTeamButton, &QPushButton::released, this, &teamListTable::addTeamButtonPressed);
 }
 
 teamListTable::~teamListTable()

@@ -1,3 +1,6 @@
+//Copyright(C) 2021 Campbell Rowland
+//see license file for more information
+
 #ifndef _ADDTEAMDIALOGUE_H_
 #define _ADDTEAMDIALOGUE_H_
 
@@ -18,6 +21,7 @@ public:
 	Ui::addTeamDialog ui;
 public slots:
 	void addButtonPressed();		// a slot to run when the add team button is pressed
+	void cancelButtonPressed();		// a slot to run when the cancel button is pressed. Should only close and delete the dialog
 signals:
 	void teamSubmitted(std::string teamname, float rating, float RD);	//a signal to emit with the values of the newly created team
 };

@@ -29,6 +29,8 @@ public:
 										qt designer make sure to call this ASAP*/
 public slots:
 	void teamAdded(size_t teamIndex); //a slot to run to add a team to the table
+signals:
+	void addTeamButtonPressed();
 };
 
 #endif
