@@ -25,7 +25,10 @@ void actionHandler::newTeam() {
 void actionHandler::newMatch()
 {
 	addMatchDialog addMatch(parent);
+	addMatch.init(teamSet);
+	QObject::connect(&addMatch, &addMatchDialog::matchSubmitted, this, &actionHandler::newMatchAdded);
 	addMatch.exec();
+	addMatch.deleteLater();
 }
 
 void actionHandler::onAbout()
@@ -43,4 +46,10 @@ void actionHandler::newTeamAdded(std::string teamName, float rating, float RD)
 {
 	teamSet->teamSet.push_back(team(teamName, rating, RD));
 	emit teamCreated(teamSet->teamSet.size() - 1);
+}
+
+void actionHandler::newMatchAdded(int team1Ind, int team2Ind, uint8_t winner)
+{
+	teamSet->matchSet.push_back(match(&teamSet->teamSet.at(team1Ind), &teamSet->teamSet.at(team2Ind), winner));
+	emit matchCreated(teamSet->matchSet.size() - 1);
 }

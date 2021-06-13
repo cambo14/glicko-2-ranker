@@ -17,8 +17,10 @@ public slots:
 	void onAbout(); //a slot to run when an action that results in an about dialog box showing up is performed
 	void onNew(); //a slot to run when a new teamset is created
 	void newTeamAdded(std::string teamName, float rating, float RD); //a slot to handle creating a team
+	void newMatchAdded(int team1Ind, int team2Ind, uint8_t winner); //a slot to handle creating a match
 signals:
 	void teamCreated(size_t index); //a signal to let other classes know a team has been created
+	void matchCreated(size_t index); //a sginal to let other classes know a match has been created
 };
 
 #endif

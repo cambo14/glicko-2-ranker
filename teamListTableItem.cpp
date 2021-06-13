@@ -7,6 +7,7 @@ teamListTableItem::teamListTableItem(std::shared_ptr<glicko2TeamSet> teamS, size
 QPushButton(QString::fromUtf8(teamS->teamSet.at(ind).name) + "  Rating: " + QString::number(teamS->teamSet.at(ind).rating),parent)
 {
 	index = ind;
+	teamSet = teamS;
 }
 
 teamListTableItem::teamListTableItem(const teamListTableItem& tableItem)

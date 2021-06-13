@@ -1,18 +1,31 @@
+//Copyright(C) 2021 Campbell Rowland
+//see license file for more information
+
 #include "matchListTable.h"
-#include <QString>
+
+void matchListTable::matchAdded(size_t matchIndex)
+{
+	setRowCount(rowCount() + 1);
+	tableWidgets.push_back(new matchListTableItem(matchList, matchIndex, this));
+	tableWidgets.at(matchIndex)->show();
+	setCellWidget(rowCount() - 1, 0, tableWidgets.at(matchIndex));
+}
 
 void matchListTable::init(std::shared_ptr<glicko2TeamSet> matchLi)
 {
 	matchList = matchLi;
-	setRowCount(20);	//TODO replace with number of matches from vector in the teamset
 }
 
 matchListTable::matchListTable(QWidget* parent)
 	: QTableWidget(1, 1, parent), addMatchButton(QString("ADD MATCH +"), this)
 {
 	setCellWidget(0, 0, &addMatchButton);
+	QObject::connect(&addMatchButton, &QPushButton::released, this, &matchListTable::addMatchButtonPressed);
 }
 
 matchListTable::~matchListTable()
 {
+	for (size_t i = 0; i < tableWidgets.size(); i++) {
+		delete tableWidgets[i];
+	}
 }

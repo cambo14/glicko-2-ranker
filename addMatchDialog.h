@@ -9,7 +9,9 @@
 
 
 #include <QDialog>
+#include <memory>
 #include "ui_addMatchDialog.h"
+#include "glicko2TeamSet.h"
 
 class addMatchDialog : public QDialog
 {
@@ -19,8 +21,17 @@ public:
 	addMatchDialog(QWidget *parent = Q_NULLPTR);
 	~addMatchDialog();
 
+	void init(std::shared_ptr<glicko2TeamSet> teamS); //init function because QT does not allow custom constructors with designer call ASAP
+
+	std::shared_ptr<glicko2TeamSet> teamSet;
 private:
 	Ui::addMatchDialog ui;
+
+public slots:
+	void addMatchButtonPressed();
+	void cancelMatchButtonPressed();
+signals:
+	void matchSubmitted(int team1Ind, int team2Ind, uint8_t winner);
 };
 
 #endif

@@ -18,7 +18,9 @@ mainWindow::mainWindow(QWidget* parent)
     QObject::connect(ui->actionAbout, &QAction::triggered, &handler, &actionHandler::onAbout);
     QObject::connect(ui->actionNew, &QAction::triggered, &handler, &actionHandler::onNew);
     QObject::connect(&handler, &actionHandler::teamCreated, ui->teamList, &teamListTable::teamAdded);
+    QObject::connect(&handler, &actionHandler::matchCreated, ui->matchList, &matchListTable::matchAdded);
     QObject::connect(&ui->teamList->addTeamButton, &QPushButton::released, &handler, &actionHandler::newTeam);
+    QObject::connect(&ui->matchList->addMatchButton, &QPushButton::released, &handler, &actionHandler::newMatch);
 
     
 }
