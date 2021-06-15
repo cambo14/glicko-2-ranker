@@ -20,6 +20,9 @@ public:
     mainWindow(QWidget *parent = nullptr);
     ~mainWindow();
 
+public slots:
+    void updateTeamInfo(size_t teamIndex);
+
 private:
     Ui::mainWindow* ui;
 };

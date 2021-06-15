@@ -68,7 +68,7 @@ public:
         werrorImg = new QLabel(layoutWidget);
         werrorImg->setObjectName(QString::fromUtf8("werrorImg"));
         werrorImg->setMaximumSize(QSize(100, 100));
-        werrorImg->setPixmap(QPixmap(QString::fromUtf8(":/resources/warning.png")));
+        werrorImg->setPixmap(QPixmap(QString::fromUtf8(":/warning")));
         werrorImg->setScaledContents(true);
 
         infoImgLay->addWidget(werrorImg);

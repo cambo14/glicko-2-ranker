@@ -21,8 +21,19 @@ mainWindow::mainWindow(QWidget* parent)
     QObject::connect(&handler, &actionHandler::matchCreated, ui->matchList, &matchListTable::matchAdded);
     QObject::connect(&ui->teamList->addTeamButton, &QPushButton::released, &handler, &actionHandler::newTeam);
     QObject::connect(&ui->matchList->addMatchButton, &QPushButton::released, &handler, &actionHandler::newMatch);
-
+    QObject::connect(ui->teamList, &teamListTable::updateTeamInfo, this, &mainWindow::updateTeamInfo);
     
+}
+
+void mainWindow::updateTeamInfo(size_t teamIndex) {
+    ui->teamNameLabel->setText(QString::fromUtf8(teamSet->teamSet[teamIndex].name)); //update values on team info label
+    ui->ratingView->setText(QString::number(teamSet->teamSet[teamIndex].rating));
+    ui->ratingDevView->setText(QString::number(teamSet->teamSet[teamIndex].RD));
+    ui->volView->setText(QString::number(teamSet->teamSet[teamIndex].volatility));
+    ui->matWonView->setText(QString::number(teamSet->teamSet[teamIndex].matchWonCount));
+    ui->matDrawnView->setText(QString::number(teamSet->teamSet[teamIndex].matchDrawnCount));
+    ui->matLostView->setText(QString::number(teamSet->teamSet[teamIndex].matchLostCount));
+
 }
 
 mainWindow::~mainWindow()

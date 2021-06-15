@@ -24,6 +24,11 @@ void actionHandler::newTeam() {
 
 void actionHandler::newMatch()
 {
+	if (teamSet->teamSet.size() < 2) {
+		nonFatalErrorDialog errorDialog(parent, "not enough teams", "you need at least two teams in the teamset to create a match.");
+		errorDialog.exec();
+		return;
+	}
 	addMatchDialog addMatch(parent);
 	addMatch.init(teamSet);
 	QObject::connect(&addMatch, &addMatchDialog::matchSubmitted, this, &actionHandler::newMatchAdded);

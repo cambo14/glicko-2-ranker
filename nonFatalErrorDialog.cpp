@@ -1,7 +1,7 @@
 #include "nonFatalErrorDialog.h"
 
 nonFatalErrorDialog::nonFatalErrorDialog(QWidget *parent, std::string title, std::string description)
-	: werrorDialog(parent), image(QString::fromUtf8(":/resources/error.png"))
+	: werrorDialog(parent), image(QString::fromUtf8("://error"))
 {
 	ui.werrorTitle->setText(QString::fromUtf8("Non Fatal Error")); //initialise design of dialogue
 	ui.werrorCap->setText(QString::fromUtf8(title));

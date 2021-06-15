@@ -14,6 +14,10 @@ public:
 	std::string name;
 	float rating;
 	float RD;
+	float volatility;
+	int matchWonCount = 0;
+	int matchLostCount = 0;
+	int matchDrawnCount = 0;
 };
 
 #endif

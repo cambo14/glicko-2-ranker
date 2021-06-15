@@ -30,7 +30,8 @@ public:
 public slots:
 	void teamAdded(size_t teamIndex); //a slot to run to add a team to the table
 signals:
-	void addTeamButtonPressed();
+	void addTeamButtonPressed();	//a signal for when the button to add a team is pressed
+	void updateTeamInfo(size_t teamIndex);	//a signal for when the user clicks on a team in the table
 };
 
 #endif
