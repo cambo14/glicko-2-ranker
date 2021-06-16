@@ -1,3 +1,6 @@
+//Copyright(C) 2021 Campbell Rowland
+//see license file for more information
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -11,8 +14,16 @@ mainWindow::mainWindow(QWidget* parent)
     ui->setupUi(this);              //initialise various ui components
     ui->matchList->init(teamSet);
     ui->teamList->init(teamSet);
+    ui->rateHistoryView->setChart(currentChart);
+    rateData->append(0, 10);
+    currentChart->addSeries(rateData);
+    currentChart->setAxisX(xAxis);
+    currentChart->setAxisY(yAxis);
+    yAxis->setTitleText("Rating");
+    xAxis->setTitleText("Match");
+    rateData->setVisible(false);
 
-    
+
     QObject::connect(ui->actionAdd_Team, &QAction::triggered, &handler, &actionHandler::newTeam); //connecting various signals to their
     QObject::connect(ui->actionAdd_Match, &QAction::triggered, &handler, &actionHandler::newMatch);//appropriate slot on actionHandler
     QObject::connect(ui->actionAbout, &QAction::triggered, &handler, &actionHandler::onAbout);
@@ -34,10 +45,24 @@ void mainWindow::updateTeamInfo(size_t teamIndex) {
     ui->matDrawnView->setText(QString::number(teamSet->teamSet[teamIndex].matchDrawnCount));
     ui->matLostView->setText(QString::number(teamSet->teamSet[teamIndex].matchLostCount));
 
+    currentChart->setTitle(QString::fromUtf8(teamSet->teamSet[teamIndex].name));    //update graph with new values
+    delete rateData;
+    rateData = new QLineSeries;
+    rateData->setName(QString::fromUtf8(teamSet->teamSet[teamIndex].name));
+    for (int i = 0; i < teamSet->teamSet[teamIndex].rateHist.size(); i++) {
+        rateData->append(i, teamSet->teamSet[teamIndex].rateHist.at(i));
+    }
+    currentChart->addSeries(rateData);
+    rateData->attachAxis(xAxis);
+    rateData->attachAxis(yAxis);
+    yAxis->setRange(0, floor((teamSet->teamSet[teamIndex].rating * 1.5) / 40) * 40);    //set range forcing all ticks to be rounded to the nearest 10
+    xAxis->setRange(0, teamSet->teamSet[teamIndex].rateHist.size());
+    if (teamSet->teamSet[teamIndex].rateHist.size() < 4) xAxis->setTickCount(teamSet->teamSet[teamIndex].rateHist.size() + 1);
 }
 
 mainWindow::~mainWindow()
 {
     delete ui;
+    delete currentChart;
 }
 

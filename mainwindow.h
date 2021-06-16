@@ -1,7 +1,13 @@
+//Copyright(C) 2021 Campbell Rowland
+//see license file for more information
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QChart>
+#include <QValueAxis>
+#include <QLineSeries>
 #include "actionHandler.h"
 
 
@@ -19,6 +25,11 @@ public:
 
     mainWindow(QWidget *parent = nullptr);
     ~mainWindow();
+
+    QChart* currentChart = new QChart;
+    QValueAxis* yAxis = new QValueAxis;
+    QValueAxis* xAxis = new QValueAxis;
+    QLineSeries* rateData = new QLineSeries;
 
 public slots:
     void updateTeamInfo(size_t teamIndex);
