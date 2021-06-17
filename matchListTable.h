@@ -1,8 +1,8 @@
-#ifndef _MATCHLISTTABLE_H_
-#define _MATCHLISTTABLE_H_
-
 //Copyright(C) 2021 Campbell Rowland
 //see license file for more information
+
+#ifndef _MATCHLISTTABLE_H_
+#define _MATCHLISTTABLE_H_
 
 #include <QTableWidget>
 #include <vector>
@@ -33,7 +33,8 @@ public:
 public slots:
 	void matchAdded(size_t matchIndex); //a slot to run when a new match is added to the table
 signals:
-	void addMatchButtonPressed();
+	void addMatchButtonPressed();		// a signal to be emitted when the add match button is pressed
+	void updateMatchInfo(size_t index);	//a signal to be emitted when one of the matche sin the table is clicked on
 };
 
 #endif

@@ -13,6 +13,7 @@ class team
 {
 public:
 	team(std::string nam, float ratin, float R);
+	bool operator==(const team& r);		//check if two teams are the same
 
 	std::string name;
 	float rating;

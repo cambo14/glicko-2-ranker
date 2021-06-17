@@ -32,8 +32,8 @@ public:
     QLineSeries* rateData = new QLineSeries;
 
 public slots:
-    void updateTeamInfo(size_t teamIndex);
-
+    void updateTeamInfo(size_t teamIndex); //slots to run to update certain elements of the ui that do not have their own custom class
+    void updateMatchInfo(size_t matchIndex);
 private:
     Ui::mainWindow* ui;
 };

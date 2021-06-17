@@ -33,7 +33,7 @@ void addMatchDialog::cancelMatchButtonPressed()
 }
 
 void addMatchDialog::addMatchButtonPressed() {
-	emit matchSubmitted(ui.team2Input->currentIndex(), ui.team2Input->currentIndex(), ui.winnerInput->currentIndex());
+	emit matchSubmitted(ui.team1Input->currentIndex(), ui.team2Input->currentIndex(), ui.winnerInput->currentIndex());
 	close();
 	//TODO check selected items are valid
 }

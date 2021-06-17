@@ -9,6 +9,8 @@ void matchListTable::matchAdded(size_t matchIndex)
 	tableWidgets.push_back(new matchListTableItem(matchList, matchIndex, this));
 	tableWidgets.at(matchIndex)->show();
 	setCellWidget(rowCount() - 1, 0, tableWidgets.at(matchIndex));
+
+	QObject::connect(this->tableWidgets.at(matchIndex), &QPushButton::released, this, [=]() {emit updateMatchInfo(matchIndex); });
 }
 
 void matchListTable::init(std::shared_ptr<glicko2TeamSet> matchLi)

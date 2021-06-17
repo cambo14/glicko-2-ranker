@@ -25,7 +25,7 @@ mainWindow::mainWindow(QWidget* parent)
 
 
     QObject::connect(ui->actionAdd_Team, &QAction::triggered, &handler, &actionHandler::newTeam); //connecting various signals to their
-    QObject::connect(ui->actionAdd_Match, &QAction::triggered, &handler, &actionHandler::newMatch);//appropriate slot on actionHandler
+    QObject::connect(ui->actionAdd_Match, &QAction::triggered, &handler, &actionHandler::newMatch);//appropriate slots
     QObject::connect(ui->actionAbout, &QAction::triggered, &handler, &actionHandler::onAbout);
     QObject::connect(ui->actionNew, &QAction::triggered, &handler, &actionHandler::onNew);
     QObject::connect(&handler, &actionHandler::teamCreated, ui->teamList, &teamListTable::teamAdded);
@@ -33,7 +33,22 @@ mainWindow::mainWindow(QWidget* parent)
     QObject::connect(&ui->teamList->addTeamButton, &QPushButton::released, &handler, &actionHandler::newTeam);
     QObject::connect(&ui->matchList->addMatchButton, &QPushButton::released, &handler, &actionHandler::newMatch);
     QObject::connect(ui->teamList, &teamListTable::updateTeamInfo, this, &mainWindow::updateTeamInfo);
-    
+    QObject::connect(ui->matchList, &matchListTable::updateMatchInfo, this, &mainWindow::updateMatchInfo);
+}
+
+void mainWindow::updateMatchInfo(size_t matchIndex)
+{
+    ui->matchNum->setText("Match " + QString::number(matchIndex + 1));
+    for (size_t i = 0; i < teamSet->teamSet.size(); i++) {
+        ui->team1Combo->addItem(QString::fromUtf8(teamSet->teamSet[i].name));
+        ui->team2Combo->addItem(QString::fromUtf8(teamSet->teamSet[i].name));
+        ui->team1Combo->setCurrentIndex(std::distance(teamSet->teamSet.begin(),std::find(teamSet->teamSet.begin(), teamSet->teamSet.end(),*teamSet->matchSet[matchIndex].team1)));
+        ui->team2Combo->setCurrentIndex(std::distance(teamSet->teamSet.begin(),std::find(teamSet->teamSet.begin(), teamSet->teamSet.end(),*teamSet->matchSet[matchIndex].team2)));
+    }
+    ui->resultCombo->addItem("Team 1 Won");
+    ui->resultCombo->addItem("Team 2 Won");
+    ui->resultCombo->addItem("Draw");
+    ui->resultCombo->setCurrentIndex(teamSet->matchSet[matchIndex].winner);
 }
 
 void mainWindow::updateTeamInfo(size_t teamIndex) {
@@ -65,4 +80,6 @@ mainWindow::~mainWindow()
     delete ui;
     delete currentChart;
 }
+
+
 
