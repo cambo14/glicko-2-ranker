@@ -32,9 +32,10 @@ public:
 
 public slots:
 	void matchAdded(size_t matchIndex); //a slot to run when a new match is added to the table
+	void updateMatch(size_t matchIndex); //a slot to update the values on the table when a match is edited outside of the table
 signals:
 	void addMatchButtonPressed();		// a signal to be emitted when the add match button is pressed
-	void updateMatchInfo(size_t index);	//a signal to be emitted when one of the matche sin the table is clicked on
+	void updateMatchInfo(size_t index);	//a signal to be emitted when one of the matches in the table is clicked on
 };
 
 #endif

@@ -11,6 +11,7 @@ public:
 	actionHandler(QWidget* par, std::shared_ptr<glicko2TeamSet> tS);
 	QWidget* parent;	//the parent window of this handler
 	std::shared_ptr<glicko2TeamSet> teamSet;
+	void nonFatalErrorEncountered(std::string name, std::string description); //a function to display an error message when an error is encountered
 public slots:
 	void newTeam();	//a slot to run when an action that results in a new team being created is performed
 	void newMatch(); //a slot to run when an action that results in a new match being created is performed

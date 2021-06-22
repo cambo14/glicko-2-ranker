@@ -22,6 +22,13 @@ void actionHandler::newTeam() {
 }
 
 
+void actionHandler::nonFatalErrorEncountered(std::string name, std::string description)
+{
+	nonFatalErrorDialog errorDialog(parent, name, description);
+	errorDialog.exec();
+	return;
+}
+
 void actionHandler::newMatch()
 {
 	if (teamSet->teamSet.size() < 2) {
@@ -55,6 +62,6 @@ void actionHandler::newTeamAdded(std::string teamName, float rating, float RD)
 
 void actionHandler::newMatchAdded(int team1Ind, int team2Ind, uint8_t winner)
 {
-	teamSet->matchSet.push_back(match(&teamSet->teamSet.at(team1Ind), &teamSet->teamSet.at(team2Ind), winner));
+	teamSet->matchSet.push_back(match(&teamSet->teamSet.at(team1Ind), &teamSet->teamSet.at(team2Ind), static_cast<result>(winner)));
 	emit matchCreated(teamSet->matchSet.size() - 1);
 }

@@ -3,6 +3,8 @@
 
 #include "matchListTable.h"
 
+//TODO create function to update table when value is changed from comboboxes in mainWindo.cpp
+
 void matchListTable::matchAdded(size_t matchIndex)
 {
 	setRowCount(rowCount() + 1);
@@ -11,6 +13,11 @@ void matchListTable::matchAdded(size_t matchIndex)
 	setCellWidget(rowCount() - 1, 0, tableWidgets.at(matchIndex));
 
 	QObject::connect(this->tableWidgets.at(matchIndex), &QPushButton::released, this, [=]() {emit updateMatchInfo(matchIndex); });
+}
+
+void matchListTable::updateMatch(size_t matchIndex)
+{
+	this->tableWidgets.at(matchIndex)->setText(QString::fromUtf8(matchList->matchSet.at(matchIndex).team1->name) + " V " + QString::fromUtf8(matchList->matchSet.at(matchIndex).team2->name));
 }
 
 void matchListTable::init(std::shared_ptr<glicko2TeamSet> matchLi)
