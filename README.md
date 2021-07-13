@@ -1,6 +1,8 @@
 # glicko-2-ranker
  A program to rank sets of teams using the glicko-2 system and to save the results to a file. This 
 program uses the QT library to handle the GUI under the GPL version 3 license. This library can be found at qt.io.
+I am also using the qcustomplot library for QT to render certain charts. You will need to download both of these
+libraries to compile from source. QCustomPlot can be found at qcustomplot.com
 
 Copyright (C) 2021  Campbell Rowland
 
