@@ -26,6 +26,7 @@
 #include <QtWidgets/QWidget>
 #include "QtCharts"
 #include "matchListTable.h"
+#include "qcustomplot.h"
 #include "teamListTable.h"
 
 QT_BEGIN_NAMESPACE
@@ -62,7 +63,7 @@ public:
     QHBoxLayout *ratingRangeLay;
     QLabel *ratingRangeLabel;
     QLabel *ratingRangeView;
-    QChartView *rankDistChart;
+    QCustomPlot *rankDistChart;
     QVBoxLayout *teamInfoLay;
     QLabel *teamNameLabel;
     QHBoxLayout *teamGraphInfoLay;
@@ -257,7 +258,7 @@ public:
 
         sysInfoLay->addLayout(sysValLay);
 
-        rankDistChart = new QChartView(centralwidget);
+        rankDistChart = new QCustomPlot(centralwidget);
         rankDistChart->setObjectName(QString::fromUtf8("rankDistChart"));
 
         sysInfoLay->addWidget(rankDistChart);

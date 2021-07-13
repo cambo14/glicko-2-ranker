@@ -60,7 +60,7 @@ void actionHandler::newTeamAdded(std::string teamName, float rating, float RD)
 	emit teamCreated(teamSet->teamSet.size() - 1);
 }
 
-void actionHandler::newMatchAdded(int team1Ind, int team2Ind, uint8_t winner)
+void actionHandler::newMatchAdded(int team1Ind, int team2Ind, uint8_t winner)	//slot to run when a new match is added to the system
 {
 	teamSet->matchSet.push_back(match(&teamSet->teamSet.at(team1Ind), &teamSet->teamSet.at(team2Ind), static_cast<result>(winner)));
 	emit matchCreated(teamSet->matchSet.size() - 1);

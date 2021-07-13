@@ -7,6 +7,7 @@
 mainWindow::mainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::mainWindow), handler(this, teamSet)
+    , rateDistribx(0), rateDistriby(0)
 {
     teamSet = std::make_shared<glicko2TeamSet>("mainWInd");
     handler.teamSet = teamSet;
@@ -24,15 +25,16 @@ mainWindow::mainWindow(QWidget* parent)
     xAxis->setTitleText("Match");
     rateData->setVisible(false);
 
-    ui->rankDistChart->setChart(currentSysInfoChart); //initialise ranking distribution chart
-    currentSysInfoChart->addSeries(rateDistribData);
-    currentSysInfoChart->setAxisX(xAxisSys);
-    currentSysInfoChart->setAxisY(yAxisSys);
-    xAxisSys->setTitleText("Rating");
-    yAxisSys->setTitleText("Number Of Teams");
-    rateDistribData->setVisible(false);
-    currentSysInfoChart->setTitle("Rating Distribution in System");
-    rateDistribData->setName("Rating Distribution throughout system");
+    ui->rankDistChart->setMinimumWidth(250);
+
+    ui->rankDistChart->addGraph();
+    ui->rankDistChart->graph(0)->setData(rateDistribx, rateDistriby);
+
+    ui->rankDistChart->xAxis->setLabel("Rating");
+    ui->rankDistChart->yAxis->setLabel("Number of Teams with rating");
+    ui->rankDistChart->xAxis->setRange(0, 2000);
+    ui->rankDistChart->yAxis->setRange(0, 5);
+    ui->rankDistChart->replot();
 
 
     QObject::connect(ui->actionAdd_Team, &QAction::triggered, &handler, &actionHandler::newTeam); //connecting various signals to their
@@ -40,6 +42,7 @@ mainWindow::mainWindow(QWidget* parent)
     QObject::connect(ui->actionAbout, &QAction::triggered, &handler, &actionHandler::onAbout);
     QObject::connect(ui->actionNew, &QAction::triggered, &handler, &actionHandler::onNew);
     QObject::connect(&handler, &actionHandler::teamCreated, ui->teamList, &teamListTable::teamAdded);
+    QObject::connect(&handler, &actionHandler::teamCreated, this, &mainWindow::addRatingDistribSeries);
     QObject::connect(&handler, &actionHandler::matchCreated, ui->matchList, &matchListTable::matchAdded);
     QObject::connect(&ui->teamList->addTeamButton, &QPushButton::released, &handler, &actionHandler::newTeam);
     QObject::connect(&ui->matchList->addMatchButton, &QPushButton::released, &handler, &actionHandler::newMatch);
@@ -89,36 +92,85 @@ void mainWindow::comboEdited(matchMemType field, size_t matchIndex) {
     emit matchComboUpdated(matchIndex);
 }
 
-void mainWindow::updateSysInfo()
-{
-    ui->numTeamsView->setText(QString::number(teamSet->teamSet.size()));
-    ui->numMatchesView->setText(QString::number(teamSet->numMatchesComplete));
-    ui->sysConView->setText(QString::number(teamSet->sysCon));      //TODO set callback for this entry
-    ui->ratingRangeView->setText(QString::number(teamSet->teamSet.at(teamSet->getLowestRating()).rating) + " - " + QString::number(teamSet->teamSet.at(teamSet->getHighestRating()).rating));
-}
 
-void mainWindow::addRatingRateHistory(size_t teamIndex) //TODO optimise for sorting when sorting is implemented
-                                                        //This will also involve sorting points for easy searching
+
+
+
+
+
+
+void mainWindow::addRatingDistribSeries(size_t teamIndex)    //TODO optimise later //function to add a rating to the series holding the different teams ratings and to then sort it
 {
-    for (int i = 0; i < rateDistribData->count(); i++) {
-        if (rateDistribData->at(i).x() == teamSet->teamSet.at(teamIndex).rating) {
-            rateDistribData->replace(i, rateDistribData->at(i).x(), rateDistribData->at(i).y() + 1);
-            return;
-        }
+    ptrdiff_t lowerRange = 0;
+    ptrdiff_t upperRange = rateDistribx.size();
+    if (rateDistribx.size() == 0) { //just add the rating to the series if it is empty so there is no issue with searching an empty vector
+        rateDistribx.append(teamSet->teamSet[teamIndex].rating);
+        rateDistriby.append(1);
+        ui->rankDistChart->replot();
+        return;
     }
-    rateDistribData->append(teamSet->teamSet.at(teamIndex).rating, 1);
-}
-
-void mainWindow::changeRatingRateHistory(size_t teamIndex, float oldRating)//TODO optimise for sorting when sorting is implemented
-                                                                           //This will also involve sorting points for easy searching
-{
-    for (size_t i = 0; i < rateDistribData->count(); i++) {
-        if (rateDistribData->at(i).x() == oldRating) {
-            rateDistribData->replace(i, rateDistribData->at(i).x(), rateDistribData->at(i).y() - 1);
+    while(true){
+        ptrdiff_t middle = floor((upperRange - lowerRange) / 2) + lowerRange;
+        if (teamSet->teamSet[teamIndex].rating > rateDistribx.at(middle)) {     
+            lowerRange = middle + 1;
+        }
+        else if (teamSet->teamSet[teamIndex].rating < rateDistribx.at(middle)) {
+            upperRange = (middle > 0) ? middle - 1 : middle;
+        }
+        else {
+            rateDistriby[middle]++;
+            break;
+        }
+        if (upperRange - lowerRange == 0) {
+            if (lowerRange >= rateDistribx.size()) {
+                rateDistribx.push_back(teamSet->teamSet[teamIndex].rating);
+                rateDistriby.push_back(1);
+            } else {
+                if (rateDistribx[lowerRange] == teamSet->teamSet[teamIndex].rating) {
+                    rateDistriby[lowerRange]++;
+                    break;
+                }
+                rateDistribx.insert(rateDistribx.begin() + lowerRange, teamSet->teamSet[teamIndex].rating);
+                rateDistriby.insert(rateDistriby.begin() + lowerRange, 1);
+            }
             break;
         }
     }
-    addRatingRateHistory(teamIndex);
+    ui->rankDistChart->xAxis->setRange(rateDistribx[0], rateDistribx[rateDistribx.size() - 1]);
+    ui->rankDistChart->yAxis->setRange(0, (teamSet->teamSet.size() > 5) ? teamSet->teamSet.size() / 2 : 5);
+    ui->rankDistChart->graph(0)->setData(rateDistribx, rateDistriby);
+    ui->rankDistChart->replot();
+}
+
+void mainWindow::initRatingData()
+{
+    rateDistribx.clear();
+    rateDistriby.clear();
+
+    for (size_t i = 0; i < teamSet->teamSet.size(); i++) {
+        bool found = false;
+        size_t lowerRange = 0;
+        size_t upperRange = rateDistribx.size() - 1;
+        while (found == false) {
+            size_t middle = floor((upperRange - lowerRange) / 2) + lowerRange;
+            if (teamSet->teamSet[i].rating > rateDistribx.at(middle)) {
+                lowerRange = middle + 1;
+            }
+            else if (teamSet->teamSet[i].rating < rateDistribx.at(middle)) {
+                upperRange = middle - 1;
+            }
+            else {
+                found = true;
+                rateDistriby[middle]++;
+            }
+            if (upperRange - lowerRange == 0) {
+                rateDistribx.insert(rateDistribx.begin() + (lowerRange + 1), teamSet->teamSet[i].rating);
+                rateDistriby.insert(rateDistriby.begin() + (lowerRange + 1), 1);
+                break;
+            }
+        }
+    }
+    ui->rankDistChart->replot();
 }
 
 
@@ -150,8 +202,4 @@ mainWindow::~mainWindow()
 {
     delete ui;
     delete currentChart;
-    delete currentSysInfoChart;
 }
-
-
-
