@@ -36,7 +36,6 @@ mainWindow::mainWindow(QWidget* parent)
     ui->rankDistChart->yAxis->setRange(0, 5);
     ui->rankDistChart->replot();
 
-
     QObject::connect(ui->actionAdd_Team, &QAction::triggered, &handler, &actionHandler::newTeam); //connecting various signals to their
     QObject::connect(ui->actionAdd_Match, &QAction::triggered, &handler, &actionHandler::newMatch);//appropriate slots
     QObject::connect(ui->actionAbout, &QAction::triggered, &handler, &actionHandler::onAbout);
@@ -49,6 +48,17 @@ mainWindow::mainWindow(QWidget* parent)
     QObject::connect(ui->teamList, &teamListTable::updateTeamInfo, this, &mainWindow::updateTeamInfo);
     QObject::connect(ui->matchList, &matchListTable::updateMatchInfo, this, &mainWindow::updateMatchInfo);
     QObject::connect(this, &mainWindow::matchComboUpdated, ui->matchList, &matchListTable::updateMatch);
+    QObject::connect(ui->calcRankButton, &QPushButton::released, this, &mainWindow::rateTeams);
+
+    //TODO remove this once debugging is done
+    handler.newTeamAdded("main", 1500, 200);
+    handler.newTeamAdded("one", 1400, 30);
+    handler.newTeamAdded("two", 1550, 100);
+    handler.newTeamAdded("three", 1700, 300);
+
+    handler.newMatchAdded(0, 1, 0);
+    handler.newMatchAdded(0, 2, 1);
+    handler.newMatchAdded(0, 3, 1);
 }
 
 void mainWindow::updateMatchInfo(size_t matchIndex)
@@ -92,12 +102,12 @@ void mainWindow::comboEdited(matchMemType field, size_t matchIndex) {
     emit matchComboUpdated(matchIndex);
 }
 
-
-
-
-
-
-
+void mainWindow::rateTeams()
+{
+    teamSet->rateTeams();
+    ui->teamList->refresh();
+    ui->matchList->clear();
+}
 
 void mainWindow::addRatingDistribSeries(size_t teamIndex)    //TODO optimise later //function to add a rating to the series holding the different teams ratings and to then sort it
 {

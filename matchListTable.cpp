@@ -25,6 +25,12 @@ void matchListTable::init(std::shared_ptr<glicko2TeamSet> matchLi)
 	matchList = matchLi;
 }
 
+void matchListTable::clear()
+{
+	for (size_t i = 0; i < tableWidgets.size(); i++) delete tableWidgets[i];
+	tableWidgets.shrink_to_fit();
+}
+
 matchListTable::matchListTable(QWidget* parent)
 	: QTableWidget(1, 1, parent), addMatchButton(QString("ADD MATCH +"), this)
 {
@@ -34,7 +40,9 @@ matchListTable::matchListTable(QWidget* parent)
 
 matchListTable::~matchListTable()
 {
-	for (size_t i = 0; i < tableWidgets.size(); i++) {
-		delete tableWidgets[i];
+	if (tableWidgets.size() > 0) {
+		for (size_t i = 0; i < tableWidgets.size(); i++) {
+			delete tableWidgets[i];
+		}
 	}
 }

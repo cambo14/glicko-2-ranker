@@ -26,6 +26,7 @@ public:
 
 	void init(std::shared_ptr<glicko2TeamSet> matchLi); /*init function due to not being able to use custom constructors for promoted classes with 
 														qt designer make sure to call this ASAP*/
+	void clear(); //clear all buttons in the table. Used when a set of matches are ranked
 
 	matchListTable(QWidget *parent = Q_NULLPTR);
 	~matchListTable();

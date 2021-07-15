@@ -38,6 +38,7 @@ public slots:
     void updateTeamInfo(size_t teamIndex); //slots to run to update certain elements of the ui that do not have their own custom class
     void updateMatchInfo(size_t matchIndex);
     void comboEdited(matchMemType field, size_t matchIndex);
+    void rateTeams();
 
 signals:
     void matchComboUpdated(size_t matchIndex); //a signal to inform the matchListTable when the combo Boxes are edited

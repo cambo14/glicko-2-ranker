@@ -19,6 +19,11 @@ void teamListTable::init(std::shared_ptr<glicko2TeamSet> teamLi)
 	teamList = teamLi;
 }
 
+void teamListTable::refresh()
+{
+	for (size_t i = 0; i < infoWidgets.size(); i++) infoWidgets[i]->refresh();
+}
+
 
 
 void teamListTable::teamAdded(size_t teamIndex) {

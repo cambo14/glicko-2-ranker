@@ -303,7 +303,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Team Name Here</string>
+           <string/>
           </property>
          </widget>
         </item>
@@ -357,7 +357,7 @@
                  </font>
                 </property>
                 <property name="text">
-                 <string>2753</string>
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -409,7 +409,7 @@
                  </font>
                 </property>
                 <property name="text">
-                 <string>351</string>
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -461,7 +461,7 @@
                  </font>
                 </property>
                 <property name="text">
-                 <string>0.08</string>
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -513,7 +513,7 @@
                  </font>
                 </property>
                 <property name="text">
-                 <string>12</string>
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -565,7 +565,7 @@
                  </font>
                 </property>
                 <property name="text">
-                 <string>12</string>
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -617,7 +617,7 @@
                  </font>
                 </property>
                 <property name="text">
-                 <string>1</string>
+                 <string/>
                 </property>
                </widget>
               </item>

@@ -1,5 +1,10 @@
+//Copyright(C) 2021 Campbell Rowland
+//see license file for more information
+
 #include "glicko2TeamSet.h"
 #include "nonFatalErrorDialog.h"
+#define _USE_MATH_DEFINES
+#include <cmath>
 
 glicko2TeamSet::glicko2TeamSet(std::string testVal) : teamSet(), matchSet()
 {
@@ -11,13 +16,87 @@ void glicko2TeamSet::addTeam(std::string name, float rating, float RD)
 	teamSet.push_back(team(name, rating, RD));
 }
 
-const size_t glicko2TeamSet::getLowestRating()
+void glicko2TeamSet::rateTeams()
+{
+	auto g = [](float newRD) ->float {return 1 / (sqrt(1 + (3 * pow(newRD, 2)) / pow(M_PI, 2))); };
+	auto E = [&](float newRating, float oppRating, float oppRD) ->float {return 1 / (1 + exp(-g(oppRD)*(newRating-oppRating))); };
+	auto newRate = [](float oldRating) ->float {return (oldRating - 1500) / 173.7178; };
+	auto newRatDev = [](float oldRD) ->float { return oldRD / 173.7178; };
+	auto resultCalc = [](uint8_t res) ->float {switch (res) {
+	case 0:
+		return 1;
+	case 1:
+		return 0;
+	case 2:
+		return 0.5;
+	}};
+	for (size_t i = 0; i < teamSet.size(); i++) {
+		teamSet[i].rateHist.insert(teamSet[i].rateHist.begin(), teamSet[i].rating);
+		float v = 0;
+		float quantity = 0;
+		float newRating = newRate(teamSet[i].rating);
+		float newRD = newRatDev(teamSet[i].RD);
+		for (size_t x = 0; x < teamSet[i].matchResults.size(); x++) {
+			v += pow(g(newRatDev(std::get<1>(teamSet[i].matchResults[x]))),2)*E(newRating, newRate(std::get<0>(teamSet[i].matchResults[x])), newRatDev(std::get<1>(teamSet[i].matchResults[x])))*(1- E(newRating, newRate(std::get<0>(teamSet[i].matchResults[x])), newRatDev(std::get<1>(teamSet[i].matchResults[x]))));
+		}
+		v = pow(v, -1);
+		for (size_t x = 0; x < teamSet[i].matchResults.size(); x++) {
+			quantity += g(newRatDev(std::get<1>(teamSet[i].matchResults[x]))) * (resultCalc(std::get<2>(teamSet[i].matchResults[x])) - E(newRating, newRate(std::get<0>(teamSet[i].matchResults[x])), newRatDev(std::get<1>(teamSet[i].matchResults[x]))));
+		}
+		quantity = quantity * v;
+
+		float a = log(pow(teamSet[i].volatility,2));
+		float vol = teamSet[i].volatility;
+
+		auto f = [&](float x, float vol) ->float {return (exp(x) * (pow(quantity,2) - pow(newRD,2) - v - exp(x)))/
+			(2*pow((pow(newRD,2) + v + exp(x)),2)) - ((x-a) /pow(DEFSYSCON,2)) ; };
+
+		float A = a;
+		float B;
+		if (pow(quantity, 2) > pow(newRD, 2) + v) {
+			B = log(pow(quantity, 2) - pow(newRD, 2) - v);
+		}
+		else {
+			int k = 1;
+			while (f(a - k * DEFSYSCON, vol) < 0)k++;
+			B = a - k * DEFSYSCON;
+		}
+		float fA = f(A, vol);
+		float fB = f(B, vol);
+		while (abs(B - A) > CONTOL) {
+			float C = A + (A - B) * fA / (fB - fA);
+			float fC = f(C, vol);
+			if (fC * fB < 0) {
+				A = B;
+				fA = fB;
+			}
+			else {
+				fA = fA / 2;
+			}
+			B = C;
+			fB = fC;
+		}
+		teamSet[i].volatility = exp(A / 2);
+		teamSet[i].RD = sqrt(pow(newRD,2) + pow(teamSet[i].volatility,2));
+		teamSet[i].RD = 1 / sqrt(1/pow(teamSet[i].RD,2) + 1/v);
+		float count = 0;
+		for (int x = 0; x < teamSet[i].matchResults.size(); x++) {
+			count += g(newRatDev(std::get<1>(teamSet[i].matchResults[x]))) * (resultCalc(std::get<2>(teamSet[i].matchResults[x]))- E(newRating, newRate(std::get<0>(teamSet[i].matchResults[x])), newRatDev(std::get<1>(teamSet[i].matchResults[x]))));
+		}
+		teamSet[i].rating = newRate(teamSet[i].rating) + pow(teamSet[i].RD, 2) * count;
+		teamSet[i].rating = 173.7178 * teamSet[i].rating + 1500;
+		teamSet[i].RD = 173.7178 * teamSet[i].RD;
+		teamSet[i].matchResults.clear(); //TODO link rank button to this function and update teamList
+	}
+}
+
+const size_t glicko2TeamSet::getLowestRating() const
 {
 	switch (teamSet.size()) {
 	case 0:{
 #ifdef _DEBUG //abort program if in debugging mode
 		abort(); //aborting program as there is no teamset to 
-#endif
+#endif	//TODO provide error handling for release configuration
 		nonFatalErrorDialog errorDialog(nullptr, "Team Set is empty", "getLowestRating was called on the teamset while it was empty");	//provide error dialog if running in release mode
 		errorDialog.deleteLater(); }
 	case 1:
@@ -35,7 +114,7 @@ const size_t glicko2TeamSet::getLowestRating()
 	}
 }
 
-const size_t glicko2TeamSet::getHighestRating()
+const size_t glicko2TeamSet::getHighestRating() const
 {
 	float highest = teamSet[0].rating;
 	size_t highestIndex = 0;

@@ -31,7 +31,7 @@ void actionHandler::nonFatalErrorEncountered(std::string name, std::string descr
 
 void actionHandler::newMatch()
 {
-	if (teamSet->teamSet.size() < 2) {
+	if (teamSet->teamSet.size() < 2) { //check that there are enough teams to create a match
 		nonFatalErrorDialog errorDialog(parent, "not enough teams", "you need at least two teams in the teamset to create a match.");
 		errorDialog.exec();
 		return;

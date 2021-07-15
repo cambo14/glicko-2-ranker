@@ -5,9 +5,13 @@ SAT.*
 *.sln
 *.vcxproj
 *.filters
+*.pri
+*.pro
+ui_*.h
 .vs/**
 debug/**
 release/**
 bin/**
 qcustomplot.*
+other/**
 
