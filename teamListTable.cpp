@@ -14,7 +14,7 @@ teamListTable::~teamListTable()
 	}
 }
 
-void teamListTable::init(std::shared_ptr<glicko2TeamSet> teamLi)
+void teamListTable::init(std::shared_ptr<glicko2TeamSet*> teamLi)
 {
 	teamList = teamLi;
 }

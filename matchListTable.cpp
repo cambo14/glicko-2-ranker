@@ -17,18 +17,19 @@ void matchListTable::matchAdded(size_t matchIndex)
 
 void matchListTable::updateMatch(size_t matchIndex)
 {
-	this->tableWidgets.at(matchIndex)->setText(QString::fromUtf8(matchList->matchSet.at(matchIndex).team1->name) + " V " + QString::fromUtf8(matchList->matchSet.at(matchIndex).team2->name));
+	this->tableWidgets.at(matchIndex)->setText(QString::fromUtf8((*(matchList.get()))->matchSet.at(matchIndex).team1->name) + " V " + QString::fromUtf8((*(matchList.get()))->matchSet.at(matchIndex).team2->name));
 }
 
-void matchListTable::init(std::shared_ptr<glicko2TeamSet> matchLi)
+void matchListTable::init(std::shared_ptr<glicko2TeamSet*> matchLi)
 {
 	matchList = matchLi;
 }
 
 void matchListTable::clear()
 {
-	for (size_t i = 0; i < tableWidgets.size(); i++) delete tableWidgets[i];
-	tableWidgets.shrink_to_fit();
+	for (int i = 1; i < rowCount(); i++)removeCellWidget(i, 0);
+	setRowCount(1);
+	tableWidgets.clear();
 }
 
 matchListTable::matchListTable(QWidget* parent)

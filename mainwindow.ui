@@ -127,7 +127,7 @@
                </font>
               </property>
               <property name="text">
-               <string>32</string>
+               <string>0</string>
               </property>
              </widget>
             </item>
@@ -185,7 +185,7 @@
                </font>
               </property>
               <property name="text">
-               <string>32</string>
+               <string>0</string>
               </property>
              </widget>
             </item>
@@ -272,7 +272,7 @@
                </font>
               </property>
               <property name="text">
-               <string>500-3500</string>
+               <string/>
               </property>
              </widget>
             </item>
@@ -626,7 +626,7 @@
            </layout>
           </item>
           <item>
-           <widget class="QChartView" name="rateHistoryView"/>
+           <widget class="QCustomPlot" name="rateHistoryView"/>
           </item>
          </layout>
         </item>
@@ -888,11 +888,6 @@
   </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>QChartView</class>
-   <extends>QGraphicsView</extends>
-   <header>QtCharts</header>
-  </customwidget>
   <customwidget>
    <class>matchListTable</class>
    <extends>QTableWidget</extends>

@@ -26,7 +26,6 @@ class glicko2TeamSet : public QObject
 public:
 	int numMatchesComplete = 0;
 	float sysCon = DEFSYSCON;
-	std::string test;
 
 	std::vector<match> matchSet;
 	std::vector<team> teamSet;
@@ -40,7 +39,7 @@ public:
 	//TODO sort by rating
 
 
-	glicko2TeamSet(std::string testVal);
+	glicko2TeamSet();
 public slots:
 	void rateTeams();
 };

@@ -6,9 +6,8 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
-glicko2TeamSet::glicko2TeamSet(std::string testVal) : teamSet(), matchSet()
+glicko2TeamSet::glicko2TeamSet() : teamSet(), matchSet()
 {
-	test = testVal;
 }
 
 void glicko2TeamSet::addTeam(std::string name, float rating, float RD)
@@ -31,7 +30,6 @@ void glicko2TeamSet::rateTeams()
 		return 0.5;
 	}};
 	for (size_t i = 0; i < teamSet.size(); i++) {
-		teamSet[i].rateHist.insert(teamSet[i].rateHist.begin(), teamSet[i].rating);
 		float v = 0;
 		float quantity = 0;
 		float newRating = newRate(teamSet[i].rating);
@@ -85,8 +83,11 @@ void glicko2TeamSet::rateTeams()
 		}
 		teamSet[i].rating = newRate(teamSet[i].rating) + pow(teamSet[i].RD, 2) * count;
 		teamSet[i].rating = 173.7178 * teamSet[i].rating + 1500;
+		teamSet[i].rateHist.push_back(teamSet[i].rating);
+		teamSet[i].addGraphVal();
 		teamSet[i].RD = 173.7178 * teamSet[i].RD;
-		teamSet[i].matchResults.clear(); //TODO link rank button to this function and update teamList
+		teamSet[i].matchResults.clear();
+		//matchSet.clear();
 	}
 }
 

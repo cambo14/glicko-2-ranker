@@ -5,11 +5,11 @@
 
 void teamListTableItem::refresh()
 {
-	setText(QString::fromUtf8(teamSet->teamSet[index].name) + " Rating: " + QString::number(teamSet->teamSet[index].rating));
+	setText(QString::fromUtf8((*teamSet.get())->teamSet[index].name) + " Rating: " + QString::number((*teamSet.get())->teamSet[index].rating));
 }
 
-teamListTableItem::teamListTableItem(std::shared_ptr<glicko2TeamSet> teamS, size_t ind, QWidget* parent) : teamSet(teamS),
-QPushButton(QString::fromUtf8(teamS->teamSet.at(ind).name) + "  Rating: " + QString::number(teamS->teamSet.at(ind).rating),parent)
+teamListTableItem::teamListTableItem(std::shared_ptr<glicko2TeamSet*> teamS, size_t ind, QWidget* parent) : teamSet(teamS),
+QPushButton(QString::fromUtf8((*teamS.get())->teamSet.at(ind).name) + "  Rating: " + QString::number((*teamS.get())->teamSet.at(ind).rating),parent)
 {
 	index = ind;
 	teamSet = teamS;

@@ -15,12 +15,12 @@ addMatchDialog::~addMatchDialog()
 {
 }
 
-void addMatchDialog::init(std::shared_ptr<glicko2TeamSet> teamS)
+void addMatchDialog::init(std::shared_ptr<glicko2TeamSet*> teamS)
 {//TODO handle if teamSet size is 0
 	teamSet = teamS;
-	for (size_t i = 0; i < teamSet->teamSet.size(); i++) {
-		ui.team1Input->addItem(QString::fromUtf8(teamSet->teamSet.at(i).name));
-		ui.team2Input->addItem(QString::fromUtf8(teamSet->teamSet.at(i).name));
+	for (size_t i = 0; i < (*teamSet)->teamSet.size(); i++) {
+		ui.team1Input->addItem(QString::fromUtf8((*teamSet)->teamSet.at(i).name));
+		ui.team2Input->addItem(QString::fromUtf8((*teamSet)->teamSet.at(i).name));
 	}
 	ui.winnerInput->addItem("Team 1");
 	ui.winnerInput->addItem("Team 2");

@@ -16,10 +16,11 @@ class matchListTableItem : public QPushButton
 {
 	Q_OBJECT
 public:
-	std::shared_ptr<glicko2TeamSet> teamSet; //points to the class that handles all the actual calculations and team/match values for the system
+	std::shared_ptr<glicko2TeamSet*> teamSet; //points to the class that handles all the actual calculations and team/match values for the system
 	size_t index;
 
-	matchListTableItem(std::shared_ptr<glicko2TeamSet> teamS, size_t ind, QWidget* parent);
+	matchListTableItem(std::shared_ptr<glicko2TeamSet*> teamS, size_t ind, QWidget* parent);
+	~matchListTableItem();
 };
 
 #endif

@@ -20,18 +20,14 @@ class mainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    std::shared_ptr<glicko2TeamSet> teamSet;
+    std::shared_ptr<glicko2TeamSet*> teamSet;
     actionHandler handler;
 
     mainWindow(QWidget *parent = nullptr);
     ~mainWindow();
 
-    QChart* currentChart = new QChart;      //chart and all its associated vars for the rating history chart for each team
-    QValueAxis* yAxis = new QValueAxis;
-    QValueAxis* xAxis = new QValueAxis;
-    QLineSeries* rateData = new QLineSeries;
 
-    QVector<double> rateDistribx, rateDistriby;
+    QVector<double> rateDistribx, rateDistriby; //QVectors holding the values for the rating distribution chart
 
 public slots:
     
@@ -39,12 +35,16 @@ public slots:
     void updateMatchInfo(size_t matchIndex);
     void comboEdited(matchMemType field, size_t matchIndex);
     void rateTeams();
-
+    void saveAs();
+    void openFile();
+    void updateSysVals();
+    void updateSysCon();
 signals:
     void matchComboUpdated(size_t matchIndex); //a signal to inform the matchListTable when the combo Boxes are edited
 private:
     Ui::mainWindow* ui;
     void addRatingDistribSeries(size_t teamIndex); //a function containing code that needs to be run when rateDistribData is changed
+    void newTeamSelected(size_t teamIndex); // a function to run to update the rating history chart when a team is selected
     void initRatingData();
 };
 

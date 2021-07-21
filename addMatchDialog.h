@@ -21,9 +21,9 @@ public:
 	addMatchDialog(QWidget *parent = Q_NULLPTR);
 	~addMatchDialog();
 
-	void init(std::shared_ptr<glicko2TeamSet> teamS); //init function because QT does not allow custom constructors with designer call ASAP
+	void init(std::shared_ptr<glicko2TeamSet*> teamS); //init function because QT does not allow custom constructors with designer call ASAP
 
-	std::shared_ptr<glicko2TeamSet> teamSet;
+	std::shared_ptr<glicko2TeamSet*> teamSet;
 private:
 	Ui::addMatchDialog ui;
 

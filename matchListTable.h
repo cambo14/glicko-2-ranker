@@ -19,12 +19,12 @@ class matchListTable : public QTableWidget
 	Q_OBJECT
 
 public:
-	std::shared_ptr<glicko2TeamSet> matchList = nullptr;
+	std::shared_ptr<glicko2TeamSet*> matchList = nullptr;
 	QPushButton addMatchButton;
 
 	std::vector<matchListTableItem*> tableWidgets;
 
-	void init(std::shared_ptr<glicko2TeamSet> matchLi); /*init function due to not being able to use custom constructors for promoted classes with 
+	void init(std::shared_ptr<glicko2TeamSet*> matchLi); /*init function due to not being able to use custom constructors for promoted classes with 
 														qt designer make sure to call this ASAP*/
 	void clear(); //clear all buttons in the table. Used when a set of matches are ranked
 

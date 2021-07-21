@@ -11,9 +11,9 @@
 class actionHandler:public QObject {  //a class designed to handle actions done by the user and to then perform the appropriate actions
 	Q_OBJECT
 public:
-	actionHandler(QWidget* par, std::shared_ptr<glicko2TeamSet> tS);
+	actionHandler(QWidget* par, std::shared_ptr<glicko2TeamSet*> tS);
 	QWidget* parent;	//the parent window of this handler
-	std::shared_ptr<glicko2TeamSet> teamSet;
+	std::shared_ptr<glicko2TeamSet*> teamSet;
 	void nonFatalErrorEncountered(std::string name, std::string description); //a function to display an error message when an error is encountered
 public slots:
 	void newTeam();	//a slot to run when an action that results in a new team being created is performed
@@ -25,6 +25,7 @@ public slots:
 signals:
 	void teamCreated(size_t index); //a signal to let other classes know a team has been created
 	void matchCreated(size_t index); //a sginal to let other classes know a match has been created
+	void sysValsNeedUpdate();
 };
 
 #endif
