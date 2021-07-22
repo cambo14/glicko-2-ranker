@@ -23,11 +23,22 @@ void actionHandler::newTeam() {
 }
 
 
-void actionHandler::nonFatalErrorEncountered(std::string name, std::string description)
+bool actionHandler::nonFatalErrorEncountered(std::string name, std::string description)
 {
-	nonFatalErrorDialog errorDialog(parent, name, description);
-	errorDialog.exec();
-	return;
+	nonFatalErrorDialog* errorDialog = new nonFatalErrorDialog(parent, name, description);
+	errorDialog->exec();
+	QObject::connect(errorDialog, &nonFatalErrorDialog::continueUnsafe, this, [&]() {errorDialog->deleteLater(); return true; });
+	QObject::connect(errorDialog, &nonFatalErrorDialog::saveAndQuit, this, [&]() {errorDialog->deleteLater(); return true; });
+	return true;
+}
+
+bool actionHandler::warningDialogEncountered(std::string name, std::string description)
+{
+	warningDialog* warnDialog = new warningDialog(parent, name, description);
+	QObject::connect(warnDialog, &warningDialog::cancelButtonPressed, this, [&]() {warnDialog->deleteLater(); return false; });
+	QObject::connect(warnDialog, &warningDialog::continueButtonPressed, this, [&]() {warnDialog->deleteLater(); return true; });
+	warnDialog->exec();
+	return true;
 }
 
 void actionHandler::newMatch()

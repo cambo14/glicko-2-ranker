@@ -3,5 +3,6 @@
         <file alias="about">resources/about.png</file>
         <file alias="warning">resources/warning.png</file>
         <file alias="error">resources/error.png</file>
+        <file>resources/calculator.ico</file>
     </qresource>
 </RCC>

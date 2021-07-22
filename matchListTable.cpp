@@ -3,8 +3,6 @@
 
 #include "matchListTable.h"
 
-//TODO create function to update table when value is changed from comboboxes in mainWindo.cpp
-
 void matchListTable::matchAdded(size_t matchIndex)
 {
 	setRowCount(rowCount() + 1);

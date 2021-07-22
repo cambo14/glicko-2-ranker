@@ -9,6 +9,9 @@ warningDialog::warningDialog(QWidget *parent, std::string title, std::string des
 	ui.werrorImg->setPixmap(image);
 	ui.button1->setText(QString::fromUtf8("Continue"));
 	ui.button2->setText(QString::fromUtf8("Cancel"));
+
+	QObject::connect(ui.button1, &QPushButton::released, this, &warningDialog::continueButtonPressed);
+	QObject::connect(ui.button2, &QPushButton::released, this, &warningDialog::cancelButtonPressed);
 }
 
 warningDialog::~warningDialog()

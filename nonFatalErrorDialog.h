@@ -11,7 +11,9 @@ public:
 	QPixmap image;	//image to be used in werror dialogue
 	nonFatalErrorDialog(QWidget *parent = Q_NULLPTR, std::string title = "unknown", std::string description = "no information was provided to the error dialog");
 	~nonFatalErrorDialog();
-
+signals:
+	void saveAndQuit();
+	void continueUnsafe();
 
 };
 

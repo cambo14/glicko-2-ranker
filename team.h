@@ -11,8 +11,6 @@
 * a class that holds the values for each individual team
 */
 
-//TODO finish removeing use of match class and use vector of pairs
-
 class team
 {
 public:

@@ -11,7 +11,6 @@
 * matches included in the teamset
 */
 
-//TODO: IMPLEMENT
 
 enum class matchMemType : unsigned short { //an enum that allows easy differentiation between the three different fields in the class
 	team1,									//this is used heavily when matches are being edited from outside of this class

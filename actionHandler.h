@@ -13,8 +13,9 @@ class actionHandler:public QObject {  //a class designed to handle actions done 
 public:
 	actionHandler(QWidget* par, std::shared_ptr<glicko2TeamSet*> tS);
 	QWidget* parent;	//the parent window of this handler
-	std::shared_ptr<glicko2TeamSet*> teamSet;
-	void nonFatalErrorEncountered(std::string name, std::string description); //a function to display an error message when an error is encountered
+	std::shared_ptr<glicko2TeamSet*> teamSet; //a pointer to the teamSet pointer
+	bool nonFatalErrorEncountered(std::string name, std::string description); //a function to display an error message when an error is encountered. Will return true if the user decides to continue and false if the user saves and quits
+	bool warningDialogEncountered(std::string name, std::string description); //a function to display a warning. Will return true if the user decides to continue and false if the user wants cancel their action
 public slots:
 	void newTeam();	//a slot to run when an action that results in a new team being created is performed
 	void newMatch(); //a slot to run when an action that results in a new match being created is performed

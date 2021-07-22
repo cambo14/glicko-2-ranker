@@ -97,7 +97,7 @@ const size_t glicko2TeamSet::getLowestRating() const
 	case 0:{
 #ifdef _DEBUG //abort program if in debugging mode
 		abort(); //aborting program as there is no teamset to 
-#endif	//TODO provide error handling for release configuration
+#endif
 		nonFatalErrorDialog errorDialog(nullptr, "Team Set is empty", "getLowestRating was called on the teamset while it was empty");	//provide error dialog if running in release mode
 		errorDialog.deleteLater(); }
 	case 1:

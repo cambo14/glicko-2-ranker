@@ -11,7 +11,7 @@
 #include "team.h"
 
 #define DEFSYSCON 0.5 //the default value for the system constant
-#define CONTOL 0.000001 //the convergence tolerance of the system TODO allow it to be changed by the system
+#define CONTOL 0.000001 //the convergence tolerance of the system
 
 /*
 * A class to handle all the information and
@@ -19,7 +19,6 @@
 * and to store all matches and teams
 */
 
-//TODO: implement class
 
 class glicko2TeamSet : public QObject
 {
@@ -36,7 +35,6 @@ public:
 
 	const size_t getLowestRating() const; //find the index of the team with the lowest rating in the system. Will give first if multiple teams have the lowest index
 	const size_t getHighestRating() const; //find the index of the team with the highest rating in the system. Will give first if multiple teams have the highest rating
-	//TODO sort by rating
 
 
 	glicko2TeamSet();

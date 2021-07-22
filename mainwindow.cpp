@@ -45,7 +45,9 @@ mainWindow::mainWindow(QWidget* parent)
     QObject::connect(ui->matchList, &matchListTable::updateMatchInfo, this, &mainWindow::updateMatchInfo);
     QObject::connect(this, &mainWindow::matchComboUpdated, ui->matchList, &matchListTable::updateMatch);
     QObject::connect(ui->calcRankButton, &QPushButton::released, this, &mainWindow::rateTeams);
+    QObject::connect(ui->actionRank, &QAction::triggered, this, &mainWindow::rateTeams);
     QObject::connect(&handler, &actionHandler::sysValsNeedUpdate, this, &mainWindow::updateSysVals);
+    QObject::connect(ui->sysConView, &QLineEdit::editingFinished, this, &mainWindow::updateSysCon);
 
 
     //TODO remove this once debugging is done
@@ -135,10 +137,38 @@ void mainWindow::rateTeams()
 
 void mainWindow::updateSysCon()
 {
-    (*teamSet)->sysCon = ui->sysConView->text().toFloat();
+    bool* isNum = new bool;
+    float newSysCon = ui->sysConView->text().toFloat(isNum);
+    if (!isNum) {
+        if (!handler.nonFatalErrorEncountered("Invalid input", "A Number was not inputted into the system constant box. Please input a positive number above 0 into the system constant box to change the system constant")) {
+            saveAs();   //save the file and close the program if the user decides to save and quit
+            delete this;
+        }
+        ui->sysConView->setText(QString::number((*teamSet)->sysCon));
+    }
+    else {
+        if (newSysCon > 0) {
+            if (!((0.3 <= newSysCon) & (newSysCon<= 1.2))) {
+                if (!handler.warningDialogEncountered("Atypical value entered", "The typical value of this variable is between 0.3 and 1.2 however you entered a number outside of this range. Do you want to continue?")) {
+                    ui->sysConView->setText(QString::number((*teamSet)->sysCon));
+                    return;
+                }
+            }
+            (*teamSet)->sysCon = newSysCon;
+            return;
+        }
+        else {
+            if (!handler.nonFatalErrorEncountered("Invalid input", "An invalid number was inputted into the system constant box. Please input a positive number above 0 into the system constant box")) {
+                saveAs();   //save the file and close the program if the user decides to save and quit
+                delete this;
+            }
+            ui->sysConView->setText(QString::number((*teamSet)->sysCon));
+        }
+    }
+    delete isNum;
 }
 
-void mainWindow::addRatingDistribSeries(size_t teamIndex)    //TODO optimise later //function to add a rating to the series holding the different teams ratings and to then sort it
+void mainWindow::addRatingDistribSeries(size_t teamIndex)    //function to add a rating to the series holding the different teams ratings and to then sort it
 {
     ptrdiff_t lowerRange = 0;
     ptrdiff_t upperRange = rateDistribx.size();
