@@ -19,10 +19,10 @@ class matchListTable : public QTableWidget
 	Q_OBJECT
 
 public:
-	std::shared_ptr<glicko2TeamSet*> matchList = nullptr;
-	QPushButton addMatchButton;
+	std::shared_ptr<glicko2TeamSet*> matchList = nullptr; //a pointer to the system pointer
+	QPushButton addMatchButton;	//the add match button on the table
 
-	std::vector<matchListTableItem*> tableWidgets;
+	std::vector<matchListTableItem*> tableWidgets;	//a vector containing pointers to all of the widgets showing matched in the table
 
 	void init(std::shared_ptr<glicko2TeamSet*> matchLi); /*init function due to not being able to use custom constructors for promoted classes with 
 														qt designer make sure to call this ASAP*/

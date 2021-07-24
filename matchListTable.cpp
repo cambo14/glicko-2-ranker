@@ -3,7 +3,7 @@
 
 #include "matchListTable.h"
 
-void matchListTable::matchAdded(size_t matchIndex)
+void matchListTable::matchAdded(size_t matchIndex) //a slot to run when a new match is added to the table
 {
 	setRowCount(rowCount() + 1);
 	tableWidgets.push_back(new matchListTableItem(matchList, matchIndex, this));
@@ -13,17 +13,18 @@ void matchListTable::matchAdded(size_t matchIndex)
 	QObject::connect(this->tableWidgets.at(matchIndex), &QPushButton::released, this, [=]() {emit updateMatchInfo(matchIndex); });
 }
 
-void matchListTable::updateMatch(size_t matchIndex)
+void matchListTable::updateMatch(size_t matchIndex) //a slot to update the values on the table when a match is edited outside of the table
 {
-	this->tableWidgets.at(matchIndex)->setText(QString::fromUtf8((*(matchList.get()))->matchSet.at(matchIndex).team1->name) + " V " + QString::fromUtf8((*(matchList.get()))->matchSet.at(matchIndex).team2->name));
+	this->tableWidgets.at(matchIndex)->setText(QString::fromUtf8((*matchList)->matchSet.at(matchIndex).team1->name) + " V " + QString::fromUtf8((*matchList)->matchSet.at(matchIndex).team2->name));
 }
 
-void matchListTable::init(std::shared_ptr<glicko2TeamSet*> matchLi)
+void matchListTable::init(std::shared_ptr<glicko2TeamSet*> matchLi) /*init function due to not being able to use custom constructors for promoted classes with 
+																	qt designer make sure to call this ASAP*/
 {
 	matchList = matchLi;
 }
 
-void matchListTable::clear()
+void matchListTable::clear() //clear all buttons in the table. Used when a set of matches are ranked
 {
 	for (int i = 1; i < rowCount(); i++)removeCellWidget(i, 0);
 	setRowCount(1);

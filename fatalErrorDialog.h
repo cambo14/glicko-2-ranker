@@ -1,3 +1,12 @@
+//Copyright(C) 2021 Campbell Rowland
+//see license file for more information
+
+/*
+* a dialog to notify users if a fatal error is encountered and then
+* take the appropriate steps to safely close the software and save to file if the user
+* wants and it is possible
+*/
+
 #ifndef _FATALERRORDIALOG_H_
 #define _FATALERRORDIALOG_H_
 

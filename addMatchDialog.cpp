@@ -15,8 +15,8 @@ addMatchDialog::~addMatchDialog()
 {
 }
 
-void addMatchDialog::init(std::shared_ptr<glicko2TeamSet*> teamS)
-{//TODO handle if teamSet size is 0
+void addMatchDialog::init(std::shared_ptr<glicko2TeamSet*> teamS) //init function because QT does not allow custom constructors with designer call ASAP
+{
 	teamSet = teamS;
 	for (size_t i = 0; i < (*teamSet)->teamSet.size(); i++) {
 		ui.team1Input->addItem(QString::fromUtf8((*teamSet)->teamSet.at(i).name));
@@ -27,13 +27,12 @@ void addMatchDialog::init(std::shared_ptr<glicko2TeamSet*> teamS)
 	ui.winnerInput->addItem("Draw");
 }
 
-void addMatchDialog::cancelMatchButtonPressed()
+void addMatchDialog::cancelMatchButtonPressed() //a slot to run when the cancel button on the dialog is pressed
 {
 	close();
 }
 
-void addMatchDialog::addMatchButtonPressed() {
+void addMatchDialog::addMatchButtonPressed() { //a slot to run when the add match button on the dialog is pressed
 	emit matchSubmitted(ui.team1Input->currentIndex(), ui.team2Input->currentIndex(), ui.winnerInput->currentIndex());
 	close();
-	//TODO check selected items are valid
 }

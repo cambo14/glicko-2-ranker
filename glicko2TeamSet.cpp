@@ -10,15 +10,15 @@ glicko2TeamSet::glicko2TeamSet() : teamSet(), matchSet()
 {
 }
 
-void glicko2TeamSet::addTeam(std::string name, float rating, float RD)
+void glicko2TeamSet::addTeam(std::string name, float rating, float RD) //a function that allows teams to be added to the system
 {
 	teamSet.push_back(team(name, rating, RD));
 }
 
-void glicko2TeamSet::rateTeams()
+void glicko2TeamSet::rateTeams() //a slot to run all of the teams in the system
 {
-	auto g = [](float newRD) ->float {return 1 / (sqrt(1 + (3 * pow(newRD, 2)) / pow(M_PI, 2))); };
-	auto E = [&](float newRating, float oppRating, float oppRD) ->float {return 1 / (1 + exp(-g(oppRD)*(newRating-oppRating))); };
+	auto g = [](float newRD) ->float {return 1 / (sqrt(1 + (3 * pow(newRD, 2)) / pow(M_PI, 2))); };	//define the lamda expressions for small functions that are used regularly
+	auto E = [&](float newRating, float oppRating, float oppRD) ->float {return 1 / (1 + exp(-g(oppRD)*(newRating-oppRating))); }; //lamda function names use the same name as the function name in the Glicko-2 paper by Mark Glickmand
 	auto newRate = [](float oldRating) ->float {return (oldRating - 1500) / 173.7178; };
 	auto newRatDev = [](float oldRD) ->float { return oldRD / 173.7178; };
 	auto resultCalc = [](uint8_t res) ->float {switch (res) {
@@ -91,7 +91,7 @@ void glicko2TeamSet::rateTeams()
 	}
 }
 
-const size_t glicko2TeamSet::getLowestRating() const
+const size_t glicko2TeamSet::getLowestRating() const //find the index of the team with the lowest rating in the system. Will give first if multiple teams have the lowest index
 {
 	switch (teamSet.size()) {
 	case 0:{
@@ -115,7 +115,7 @@ const size_t glicko2TeamSet::getLowestRating() const
 	}
 }
 
-const size_t glicko2TeamSet::getHighestRating() const
+const size_t glicko2TeamSet::getHighestRating() const //find the index of the team with the highest rating in the system. Will give first if multiple teams have the highest rating
 {
 	float highest = teamSet[0].rating;
 	size_t highestIndex = 0;

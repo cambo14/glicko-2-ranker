@@ -14,16 +14,17 @@ actionHandler::actionHandler(QWidget* par, std::shared_ptr<glicko2TeamSet*> tS) 
 	teamSet = tS;
 }
 
-void actionHandler::newTeam() {
+void actionHandler::newTeam() { //a slot to run when an action that results in a new team being created is performed
 	emit sysValsNeedUpdate();
 	addTeamDialog addTeam(parent);
 	QObject::connect(&addTeam, &addTeamDialog::teamSubmitted, this, &actionHandler::newTeamAdded); //connect the new team dialog to the handler
+	QObject::connect(&addTeam, &addTeamDialog::saveQuit, this, &actionHandler::saveAndQuit);
 	addTeam.exec();
 	addTeam.deleteLater();
 }
 
 
-bool actionHandler::nonFatalErrorEncountered(std::string name, std::string description)
+bool actionHandler::nonFatalErrorEncountered(std::string name, std::string description) //a function to display an error message when an error is encountered. Will return true if the user decides to continue and false if the user saves and quits
 {
 	nonFatalErrorDialog* errorDialog = new nonFatalErrorDialog(parent, name, description);
 	errorDialog->exec();
@@ -32,7 +33,7 @@ bool actionHandler::nonFatalErrorEncountered(std::string name, std::string descr
 	return true;
 }
 
-bool actionHandler::warningDialogEncountered(std::string name, std::string description)
+bool actionHandler::warningDialogEncountered(std::string name, std::string description) //a function to display a warning. Will return true if the user decides to continue and false if the user wants cancel their action
 {
 	warningDialog* warnDialog = new warningDialog(parent, name, description);
 	QObject::connect(warnDialog, &warningDialog::cancelButtonPressed, this, [&]() {warnDialog->deleteLater(); return false; });
@@ -41,7 +42,7 @@ bool actionHandler::warningDialogEncountered(std::string name, std::string descr
 	return true;
 }
 
-void actionHandler::newMatch()
+void actionHandler::newMatch() //a slot to run when an action that results in a new match being created is performed
 {
 	emit sysValsNeedUpdate();
 	if ((*teamSet)->teamSet.size() < 2) { //check that there are enough teams to create a match
@@ -56,18 +57,18 @@ void actionHandler::newMatch()
 	addMatch.deleteLater();
 }
 
-void actionHandler::onAbout()
+void actionHandler::onAbout() //a slot to run when an action that results in an about dialog box showing up is performed
 {
 	aboutDialog about(parent);
 	about.exec();
 }
 
-void actionHandler::onNew()
+void actionHandler::onNew() //a slot to run when a new teamset is created
 {
 	teamSet = std::make_shared<glicko2TeamSet*>();
 }
 
-void actionHandler::newTeamAdded(std::string teamName, float rating, float RD)
+void actionHandler::newTeamAdded(std::string teamName, float rating, float RD) //a slot to handle creating a team
 {
 	(*teamSet)->teamSet.push_back(team(teamName, rating, RD));
 	emit teamCreated((*teamSet)->teamSet.size() - 1);
@@ -77,4 +78,9 @@ void actionHandler::newMatchAdded(int team1Ind, int team2Ind, uint8_t winner)	//
 {
 	(*teamSet)->matchSet.push_back(match(&(*teamSet)->teamSet.at(team1Ind), &(*teamSet)->teamSet.at(team2Ind), static_cast<result>(winner)));
 	emit matchCreated((*teamSet)->matchSet.size() - 1);
+}
+
+void actionHandler::saveAndQuit() //a slot to save the current teamSet and then quit
+{
+	emit onSaveAndQuit();
 }

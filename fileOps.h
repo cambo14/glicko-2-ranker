@@ -1,6 +1,12 @@
 //Copyright(C) 2021 Campbell Rowland
 //see license file for more information
 
+/*
+* A header file that contains the functions that
+* do all the actions on files that need to be done
+* by this software
+*/
+
 #ifndef _FILEOPS_H_
 #define _FILEOPS_H_
 #include <iostream>

@@ -17,10 +17,10 @@ class teamListTable : public QTableWidget
 {
 	Q_OBJECT
 public:
-	QPushButton addTeamButton;
-	std::vector<teamListTableItem*> infoWidgets;
+	QPushButton addTeamButton;	//the add team button at the start of the list of teams
+	std::vector<teamListTableItem*> infoWidgets; //a vector containing pointers to all of the items in the list providing info on teams
 
-	std::shared_ptr<glicko2TeamSet*> teamList = nullptr;
+	std::shared_ptr<glicko2TeamSet*> teamList = nullptr;	//a pointer to a pointer to the rating system
 
 	teamListTable(QWidget* parent = Q_NULLPTR);
 	~teamListTable();

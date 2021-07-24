@@ -3,7 +3,7 @@
 
 #include "teamListTableItem.h"
 
-void teamListTableItem::refresh()
+void teamListTableItem::refresh() //function to refresh values shown on the table when edited from an external source
 {
 	setText(QString::fromUtf8((*teamSet.get())->teamSet[index].name) + " Rating: " + QString::number((*teamSet.get())->teamSet[index].rating));
 }

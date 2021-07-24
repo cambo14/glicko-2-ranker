@@ -5,7 +5,7 @@
 #include "actionHandler.h"
 #include <QXmlStreamWriter>
 
-void createAndSaveCurrentToFile(QFile* file, actionHandler* handler)
+void createAndSaveCurrentToFile(QFile* file, actionHandler* handler) //a function to take the curren teamset and store all of its information to file
 {
 	if (file->exists()) handler->nonFatalErrorEncountered("File already exists",	//check that the file name supplied is valid
 		"The file with the name you are attempting to enter already exists. Please create a file with a different name or location");
@@ -70,7 +70,7 @@ void createAndSaveCurrentToFile(QFile* file, actionHandler* handler)
 	file->close();
 }
 
-void readFromFile(QFile* file, actionHandler* handler)
+void readFromFile(QFile* file, actionHandler* handler) //a function to read all the data on the ranking system from a provided XML file
 {
 	glicko2TeamSet newTeamSet;
 	if(!file->exists()) handler->nonFatalErrorEncountered("File already exists",	//check that the file name supplied is valid

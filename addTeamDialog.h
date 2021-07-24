@@ -4,8 +4,10 @@
 #ifndef _ADDTEAMDIALOGUE_H_
 #define _ADDTEAMDIALOGUE_H_
 
-/* A Class to provide a dialog box when the user tries
- to create a team*/
+/* 
+* A Class to provide a dialog box when the user tries
+* to create a team
+*/
 
 #include <QDialog>
 #include "ui_addTeamDialog.h"
@@ -23,6 +25,7 @@ public slots:
 	void addButtonPressed();		// a slot to run when the add team button is pressed
 	void cancelButtonPressed();		// a slot to run when the cancel button is pressed. Should only close and delete the dialog
 signals:
+	void saveQuit(); //a signal to be emitted if there was an error with the dialog box and the application needs to quit
 	void teamSubmitted(std::string teamname, float rating, float RD);	//a signal to emit with the values of the newly created team
 };
 

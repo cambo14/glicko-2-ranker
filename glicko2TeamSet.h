@@ -23,15 +23,13 @@
 class glicko2TeamSet : public QObject
 {
 public:
-	int numMatchesComplete = 0;
-	float sysCon = DEFSYSCON;
+	int numMatchesComplete = 0; //the number of matches that have been completed in the current system
+	float sysCon = DEFSYSCON;	//the system constant variable for the system
 
-	std::vector<match> matchSet;
-	std::vector<team> teamSet;
+	std::vector<match> matchSet; //a vector that contains all the matches that have not yet been processed by the system
+	std::vector<team> teamSet;	 //a vector that contains all the teams in the system
 
-	void addTeam(std::string name, float rating, float RD);
-
-
+	void addTeam(std::string name, float rating, float RD);	//a function that allows teams to be added to the system
 
 	const size_t getLowestRating() const; //find the index of the team with the lowest rating in the system. Will give first if multiple teams have the lowest index
 	const size_t getHighestRating() const; //find the index of the team with the highest rating in the system. Will give first if multiple teams have the highest rating
@@ -39,7 +37,7 @@ public:
 
 	glicko2TeamSet();
 public slots:
-	void rateTeams();
+	void rateTeams();	//a slot to run all of the teams in the system
 };
 
 #endif

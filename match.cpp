@@ -30,7 +30,7 @@ match::match(team* t1, team* t2, result win)
 	default: {
 #ifndef _DEBUG
 			abort(); //abort if in debug config as invalid enum supplied
-#endif //TODO provide alternative if in release mode
+#endif
 			break;
 		}
 	}

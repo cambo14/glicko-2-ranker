@@ -4,8 +4,10 @@
 #ifndef _ADDMATCHDIALOGUE_H_
 #define _ADDMATCHDIALOGUE_H_
 
-/* A Class to provide a dialog box when the user tries
- to create a match*/
+/* 
+* A Class to provide a dialog box when the user tries
+* to create a match
+*/
 
 
 #include <QDialog>
@@ -23,15 +25,15 @@ public:
 
 	void init(std::shared_ptr<glicko2TeamSet*> teamS); //init function because QT does not allow custom constructors with designer call ASAP
 
-	std::shared_ptr<glicko2TeamSet*> teamSet;
+	std::shared_ptr<glicko2TeamSet*> teamSet;	//a shared pointer to the teamset pointer
 private:
-	Ui::addMatchDialog ui;
+	Ui::addMatchDialog ui; //the dialogs UI
 
 public slots:
-	void addMatchButtonPressed();
-	void cancelMatchButtonPressed();
+	void addMatchButtonPressed();	//a slot to run when the add match button on the dialog is pressed
+	void cancelMatchButtonPressed();	//a slot to run when the cancel button on the dialog is pressed
 signals:
-	void matchSubmitted(int team1Ind, int team2Ind, uint8_t winner);
+	void matchSubmitted(int team1Ind, int team2Ind, uint8_t winner);	//a signal to notify other classes when a match is submitted using this dialog
 };
 
 #endif

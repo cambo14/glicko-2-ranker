@@ -39,6 +39,7 @@ mainWindow::mainWindow(QWidget* parent)
     QObject::connect(&handler, &actionHandler::teamCreated, ui->teamList, &teamListTable::teamAdded);
     QObject::connect(&handler, &actionHandler::teamCreated, this, &mainWindow::addRatingDistribSeries);
     QObject::connect(&handler, &actionHandler::matchCreated, ui->matchList, &matchListTable::matchAdded);
+    QObject::connect(&handler, &actionHandler::onSaveAndQuit, this, [&]() {saveAs(); delete this; });
     QObject::connect(&ui->teamList->addTeamButton, &QPushButton::released, &handler, &actionHandler::newTeam);
     QObject::connect(&ui->matchList->addMatchButton, &QPushButton::released, &handler, &actionHandler::newMatch);
     QObject::connect(ui->teamList, &teamListTable::updateTeamInfo, this, &mainWindow::updateTeamInfo);
@@ -49,45 +50,34 @@ mainWindow::mainWindow(QWidget* parent)
     QObject::connect(&handler, &actionHandler::sysValsNeedUpdate, this, &mainWindow::updateSysVals);
     QObject::connect(ui->sysConView, &QLineEdit::editingFinished, this, &mainWindow::updateSysCon);
 
-
-    //TODO remove this once debugging is done
-    handler.newTeamAdded("main", 1500, 200);
-    handler.newTeamAdded("one", 1400, 30);
-    handler.newTeamAdded("two", 1550, 100);
-    handler.newTeamAdded("three", 1700, 300);
-
-    handler.newMatchAdded(0, 1, 0);
-    handler.newMatchAdded(0, 2, 1);
-    handler.newMatchAdded(0, 3, 1);
-
     updateSysVals(); //update the sysVals panel
 }
 
 
 
-void mainWindow::saveAs()
+void mainWindow::saveAs() //a slot to be run when the user wants to save the current system to a file
 {
     QFile saveFile(QFileDialog::getSaveFileName(this, "Save As","", "Xml Files(*.xml)", nullptr, QFileDialog::ShowDirsOnly));
     createAndSaveCurrentToFile(&saveFile, &handler);
 }
 
-void mainWindow::updateMatchInfo(size_t matchIndex)
+void mainWindow::updateMatchInfo(size_t matchIndex) // a slot that updates match info on the UI when it is edited
 {
+    ui->team1Combo->disconnect();
+    ui->team2Combo->disconnect();
+    ui->resultCombo->disconnect();
+
     ui->matchNum->setText("Match " + QString::number(matchIndex + 1));
-    for (size_t i = 0; i < (*teamSet.get())->teamSet.size(); i++) {
-        ui->team1Combo->addItem(QString::fromUtf8((*teamSet.get())->teamSet[i].name));
-        ui->team2Combo->addItem(QString::fromUtf8((*teamSet.get())->teamSet[i].name));
-        ui->team1Combo->setCurrentIndex(std::distance((*teamSet.get())->teamSet.begin(),std::find((*teamSet.get())->teamSet.begin(), (*teamSet.get())->teamSet.end(),*(*teamSet.get())->matchSet[matchIndex].team1)));
-        ui->team2Combo->setCurrentIndex(std::distance((*teamSet.get())->teamSet.begin(),std::find((*teamSet.get())->teamSet.begin(), (*teamSet.get())->teamSet.end(),*(*teamSet.get())->matchSet[matchIndex].team2)));
+    for (size_t i = 0; i < (*teamSet)->teamSet.size(); i++) {
+        ui->team1Combo->addItem(QString::fromUtf8((*teamSet)->teamSet[i].name));
+        ui->team2Combo->addItem(QString::fromUtf8((*teamSet)->teamSet[i].name));
+        ui->team1Combo->setCurrentIndex(std::distance((*teamSet)->teamSet.begin(),std::find((*teamSet)->teamSet.begin(), (*teamSet)->teamSet.end(),(*teamSet)->matchSet[matchIndex].team1)));
+        ui->team2Combo->setCurrentIndex(std::distance((*teamSet)->teamSet.begin(),std::find((*teamSet)->teamSet.begin(), (*teamSet)->teamSet.end(),(*teamSet)->matchSet[matchIndex].team2)));
     }
     ui->resultCombo->addItem("Team 1 Won");
     ui->resultCombo->addItem("Team 2 Won");
     ui->resultCombo->addItem("Draw");
-    ui->resultCombo->setCurrentIndex(static_cast<unsigned short>((*(teamSet.get()))->matchSet[matchIndex].winner));
-    
-    ui->team1Combo->disconnect();
-    ui->team2Combo->disconnect();
-    ui->resultCombo->disconnect();
+    ui->resultCombo->setCurrentIndex(static_cast<unsigned short>((*teamSet)->matchSet[matchIndex].winner));
 
     QObject::connect(ui->team1Combo, &QComboBox::currentIndexChanged, this, [=]() {
         this->comboEdited(matchMemType::team1, matchIndex); });
@@ -97,7 +87,7 @@ void mainWindow::updateMatchInfo(size_t matchIndex)
         this->comboEdited(matchMemType::result, matchIndex); });
 }
 
-void mainWindow::openFile()
+void mainWindow::openFile()  //a slot to be run when the user wants to open a system that is saved on a file
 {
     QFile openFile(QFileDialog::getOpenFileName(this, "Open", "", "Xml Files(*.xml)"));
     readFromFile(&openFile, &handler);
@@ -105,29 +95,29 @@ void mainWindow::openFile()
     emit handler.sysValsNeedUpdate();
 }
 
-void mainWindow::comboEdited(matchMemType field, size_t matchIndex) {
+void mainWindow::comboEdited(matchMemType field, size_t matchIndex) { //a slot that is run when on of the matches are edited using the combo boxes in the bottom right of the main window
     switch (field) {
     case matchMemType::team1:
-        (*(this->teamSet.get()))->matchSet[matchIndex].team1 = &(*teamSet.get())->teamSet.at(ui->team1Combo->currentIndex());
+        (*teamSet)->matchSet[matchIndex].team1 = &(*teamSet)->teamSet.at(ui->team1Combo->currentIndex());
         break;
     case matchMemType::team2:
-        (*(this->teamSet.get()))->matchSet[matchIndex].team2 = &(*teamSet.get())->teamSet.at(ui->team2Combo->currentIndex());
+        (*teamSet)->matchSet[matchIndex].team2 = &(*teamSet)->teamSet.at(ui->team2Combo->currentIndex());
         break;
     case matchMemType::result:
-        (*(this->teamSet.get()))->matchSet[matchIndex].winner = static_cast<result>(ui->resultCombo->currentIndex());
+        (*teamSet)->matchSet[matchIndex].winner = static_cast<result>(ui->resultCombo->currentIndex());
         break;
     }
     emit matchComboUpdated(matchIndex);
 }
 
-void mainWindow::updateSysVals()
+void mainWindow::updateSysVals() //a slot to be run when the system values need to be edited in the UI
 {
     ui->numTeamsView->setText(QString::number((*teamSet)->teamSet.size()));
     ui->numMatchesView->setText(QString::number((*teamSet)->numMatchesComplete));
     if ((*teamSet)->teamSet.size() > 0) ui->ratingRangeView->setText(QString::number((*teamSet)->teamSet[(*teamSet)->getLowestRating()].rating) + " - " + QString::number((*teamSet)->teamSet[(*teamSet)->getHighestRating()].rating));
 }
 
-void mainWindow::rateTeams()
+void mainWindow::rateTeams() //a slot to be run when the user wants to rate all the teams based on the submitted matches
 {
     emit handler.sysValsNeedUpdate();
     (*(teamSet.get()))->rateTeams();
@@ -135,7 +125,7 @@ void mainWindow::rateTeams()
     ui->matchList->clear();
 }
 
-void mainWindow::updateSysCon()
+void mainWindow::updateSysCon() // a slot to be run when the system constant needs to be edited in the UI
 {
     bool* isNum = new bool;
     float newSysCon = ui->sysConView->text().toFloat(isNum);
@@ -211,7 +201,7 @@ void mainWindow::addRatingDistribSeries(size_t teamIndex)    //function to add a
     ui->rankDistChart->replot();
 }
 
-void mainWindow::initRatingData()
+void mainWindow::initRatingData() // a dunction to run when the rating chart needs to be intialised
 {
     rateDistribx.clear();
     rateDistriby.clear();
@@ -243,7 +233,7 @@ void mainWindow::initRatingData()
 }
 
 
-void mainWindow::updateTeamInfo(size_t teamIndex) {
+void mainWindow::updateTeamInfo(size_t teamIndex) { //a slot that updates teams info on the UI when it is edited
     ui->teamNameLabel->setText(QString::fromUtf8((*teamSet.get())->teamSet[teamIndex].name)); //update values on team info label
     ui->ratingView->setText(QString::number((*teamSet.get())->teamSet[teamIndex].rating));
     ui->ratingDevView->setText(QString::number((*teamSet.get())->teamSet[teamIndex].RD));
@@ -254,7 +244,7 @@ void mainWindow::updateTeamInfo(size_t teamIndex) {
     newTeamSelected(teamIndex);
 }
 
-void mainWindow::newTeamSelected(size_t teamIndex) {
+void mainWindow::newTeamSelected(size_t teamIndex) { // a function to run to update the rating history chart when a team is selected
     ui->rateHistoryView->xAxis->setRange(0, (*teamSet.get())->teamSet[teamIndex].rateHistx.size());
     ui->rateHistoryView->yAxis->setRange(0,(*teamSet.get())->teamSet[teamIndex].getHighestRateHist() * 1.3);
     ui->rateHistoryView->xAxis->setLabel(QString::fromUtf8((*teamSet.get())->teamSet[teamIndex].name));

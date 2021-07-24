@@ -1,3 +1,10 @@
+//Copyright(C) 2021 Campbell Rowland
+//see license file for more information
+
+/*
+* the base class that nonFatalErrorDialog, fatalErrorDialog and warningDialog are all based off of
+*/
+
 #ifndef _WERRORDIALOG_H_
 #define _WERRORDIALOG_H_
 

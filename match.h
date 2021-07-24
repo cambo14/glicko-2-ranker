@@ -27,9 +27,10 @@ enum class result :unsigned short {			//an enum that provides access to the thre
 class match
 {
 public:
-	team* team1;
+	team* team1;	//pointers to both of the teams involved in the match
 	team* team2;
-	result winner;
+
+	result winner;	//a variable holding the results of the match
 	match(team* t1, team* t2, result win);
 };
 #endif

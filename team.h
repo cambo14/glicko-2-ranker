@@ -21,17 +21,17 @@ public:
 
 	const float getHighestRateHist(); //a function to get the highest rating in the teams rating history
 
-	std::string name;
-	float rating;
-	float RD;
-	float volatility;
-	int matchWonCount = 0;
-	int matchLostCount = 0;
-	int matchDrawnCount = 0;
+	std::string name;	//the name of the team
+	float rating;	//the teams rating
+	float RD;	//the teams rating deviation
+	float volatility;	//the teams volatility
+	int matchWonCount = 0;	//the number of matches the team has won
+	int matchLostCount = 0;	//the number of matches the team has lost
+	int matchDrawnCount = 0;//the number of matches the team has drawn
 
 	QVector<double> rateHistx, rateHisty; //Qvectors holding the teams x and y values for the rating history graph
 
-	std::vector<float> rateHist;
+	std::vector<float> rateHist;	//a vector of floats containing all of the previous ratings that the team has had
 	std::vector<std::tuple<float, float, uint8_t>> matchResults;	//a vector that holds all the results of the matches the team is in in the current period
 };
 
