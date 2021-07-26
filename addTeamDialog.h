@@ -9,7 +9,7 @@
 * to create a team
 */
 
-#include <QDialog>
+#include <QtWidgets/QDialog>
 #include "ui_addTeamDialog.h"
 
 class addTeamDialog : public QDialog

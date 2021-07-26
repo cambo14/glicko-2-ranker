@@ -10,7 +10,7 @@
 */
 
 
-#include <QDialog>
+#include <QtWidgets/QDialog>
 #include <memory>
 #include "ui_addMatchDialog.h"
 #include "glicko2TeamSet.h"
@@ -34,6 +34,7 @@ public slots:
 	void cancelMatchButtonPressed();	//a slot to run when the cancel button on the dialog is pressed
 signals:
 	void matchSubmitted(int team1Ind, int team2Ind, uint8_t winner);	//a signal to notify other classes when a match is submitted using this dialog
+	void saveAndQuit(); //a signal to be emitted if the application needs to save and quit
 };
 
 #endif

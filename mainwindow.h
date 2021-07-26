@@ -10,10 +10,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QChart>
-#include <QValueAxis>
-#include <QLineSeries>
+#include <QtWidgets/QMainWindow>
 #include "actionHandler.h"
 
 

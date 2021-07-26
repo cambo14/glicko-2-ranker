@@ -8,7 +8,7 @@
 #ifndef _WERRORDIALOG_H_
 #define _WERRORDIALOG_H_
 
-#include <QDialog>
+#include <QtWidgets/QDialog>
 #include "ui_werrorDialog.h"
 
 class werrorDialog : public QDialog

@@ -39,7 +39,7 @@ mainWindow::mainWindow(QWidget* parent)
     QObject::connect(&handler, &actionHandler::teamCreated, ui->teamList, &teamListTable::teamAdded);
     QObject::connect(&handler, &actionHandler::teamCreated, this, &mainWindow::addRatingDistribSeries);
     QObject::connect(&handler, &actionHandler::matchCreated, ui->matchList, &matchListTable::matchAdded);
-    QObject::connect(&handler, &actionHandler::onSaveAndQuit, this, [&]() {saveAs(); delete this; });
+    QObject::connect(&handler, &actionHandler::onSaveAndQuit, this, [&]() {saveAs(); this->close(); });
     QObject::connect(&ui->teamList->addTeamButton, &QPushButton::released, &handler, &actionHandler::newTeam);
     QObject::connect(&ui->matchList->addMatchButton, &QPushButton::released, &handler, &actionHandler::newMatch);
     QObject::connect(ui->teamList, &teamListTable::updateTeamInfo, this, &mainWindow::updateTeamInfo);
@@ -71,8 +71,8 @@ void mainWindow::updateMatchInfo(size_t matchIndex) // a slot that updates match
     for (size_t i = 0; i < (*teamSet)->teamSet.size(); i++) {
         ui->team1Combo->addItem(QString::fromUtf8((*teamSet)->teamSet[i].name));
         ui->team2Combo->addItem(QString::fromUtf8((*teamSet)->teamSet[i].name));
-        ui->team1Combo->setCurrentIndex(std::distance((*teamSet)->teamSet.begin(),std::find((*teamSet)->teamSet.begin(), (*teamSet)->teamSet.end(),(*teamSet)->matchSet[matchIndex].team1)));
-        ui->team2Combo->setCurrentIndex(std::distance((*teamSet)->teamSet.begin(),std::find((*teamSet)->teamSet.begin(), (*teamSet)->teamSet.end(),(*teamSet)->matchSet[matchIndex].team2)));
+        ui->team1Combo->setCurrentIndex(std::distance((*teamSet)->teamSet.begin(),std::find((*teamSet)->teamSet.begin(), (*teamSet)->teamSet.end(),*(*teamSet)->matchSet[matchIndex].team1)));
+        ui->team2Combo->setCurrentIndex(std::distance((*teamSet)->teamSet.begin(),std::find((*teamSet)->teamSet.begin(), (*teamSet)->teamSet.end(),*(*teamSet)->matchSet[matchIndex].team2)));
     }
     ui->resultCombo->addItem("Team 1 Won");
     ui->resultCombo->addItem("Team 2 Won");
@@ -96,11 +96,20 @@ void mainWindow::openFile()  //a slot to be run when the user wants to open a sy
 }
 
 void mainWindow::comboEdited(matchMemType field, size_t matchIndex) { //a slot that is run when on of the matches are edited using the combo boxes in the bottom right of the main window
+    auto checkValid = [&](QComboBox* boxToEdit, size_t prevPos) ->bool {if (&(*teamSet)->teamSet[ui->team1Combo->currentIndex()] == &(*teamSet)->teamSet[ui->team2Combo->currentIndex()]) {
+        handler.nonFatalErrorEncountered("Invalid team selection", "The two teams selected cannot be the same please make sure you select two different teams when creating a match");
+        boxToEdit->setCurrentIndex(prevPos);
+        return false;
+    }return true; }; //lambda function to check that the new match is valid and create an error message if it is not
     switch (field) {
     case matchMemType::team1:
+        if (!checkValid(ui->team1Combo, std::distance((*teamSet)->teamSet.begin(), std::find((*teamSet)->teamSet.begin(),
+            (*teamSet)->teamSet.end(), *(*teamSet)->matchSet[matchIndex].team1)))) return;
         (*teamSet)->matchSet[matchIndex].team1 = &(*teamSet)->teamSet.at(ui->team1Combo->currentIndex());
         break;
     case matchMemType::team2:
+        if(!checkValid(ui->team2Combo, std::distance((*teamSet)->teamSet.begin(), std::find((*teamSet)->teamSet.begin(),
+            (*teamSet)->teamSet.end(), *(*teamSet)->matchSet[matchIndex].team2)))) return;
         (*teamSet)->matchSet[matchIndex].team2 = &(*teamSet)->teamSet.at(ui->team2Combo->currentIndex());
         break;
     case matchMemType::result:
@@ -120,7 +129,7 @@ void mainWindow::updateSysVals() //a slot to be run when the system values need 
 void mainWindow::rateTeams() //a slot to be run when the user wants to rate all the teams based on the submitted matches
 {
     emit handler.sysValsNeedUpdate();
-    (*(teamSet.get()))->rateTeams();
+    (*teamSet)->rateTeams();
     ui->teamList->refresh();
     ui->matchList->clear();
 }
@@ -182,10 +191,10 @@ void mainWindow::addRatingDistribSeries(size_t teamIndex)    //function to add a
         }
         if (upperRange - lowerRange == 0) {
             if (lowerRange >= rateDistribx.size()) {
-                rateDistribx.push_back((*(teamSet.get()))->teamSet[teamIndex].rating);
+                rateDistribx.push_back((*teamSet)->teamSet[teamIndex].rating);
                 rateDistriby.push_back(1);
             } else {
-                if (rateDistribx[lowerRange] == (*(teamSet.get()))->teamSet[teamIndex].rating) {
+                if (rateDistribx[lowerRange] == (*teamSet)->teamSet[teamIndex].rating) {
                     rateDistriby[lowerRange]++;
                     break;
                 }
@@ -196,7 +205,7 @@ void mainWindow::addRatingDistribSeries(size_t teamIndex)    //function to add a
         }
     }
     ui->rankDistChart->xAxis->setRange(rateDistribx[0], rateDistribx[rateDistribx.size() - 1]);
-    ui->rankDistChart->yAxis->setRange(0, ((*(teamSet.get()))->teamSet.size() > 5) ? (*(teamSet.get()))->teamSet.size() / 2 : 5);
+    ui->rankDistChart->yAxis->setRange(0, ((*teamSet)->teamSet.size() > 5) ? (*teamSet)->teamSet.size() / 2 : 5);
     ui->rankDistChart->graph(0)->setData(rateDistribx, rateDistriby);
     ui->rankDistChart->replot();
 }
@@ -212,10 +221,10 @@ void mainWindow::initRatingData() // a dunction to run when the rating chart nee
         size_t upperRange = rateDistribx.size() - 1;
         while (found == false) {
             size_t middle = floor((upperRange - lowerRange) / 2) + lowerRange;
-            if ((*teamSet.get())->teamSet[i].rating > rateDistribx.at(middle)) {
+            if ((*teamSet)->teamSet[i].rating > rateDistribx.at(middle)) {
                 lowerRange = middle + 1;
             }
-            else if ((*teamSet.get())->teamSet[i].rating < rateDistribx.at(middle)) {
+            else if ((*teamSet)->teamSet[i].rating < rateDistribx.at(middle)) {
                 upperRange = middle - 1;
             }
             else {
@@ -223,7 +232,7 @@ void mainWindow::initRatingData() // a dunction to run when the rating chart nee
                 rateDistriby[middle]++;
             }
             if (upperRange - lowerRange == 0) {
-                rateDistribx.insert(rateDistribx.begin() + (lowerRange + 1), (*teamSet.get())->teamSet[i].rating);
+                rateDistribx.insert(rateDistribx.begin() + (lowerRange + 1), (*teamSet)->teamSet[i].rating);
                 rateDistriby.insert(rateDistriby.begin() + (lowerRange + 1), 1);
                 break;
             }
@@ -234,21 +243,21 @@ void mainWindow::initRatingData() // a dunction to run when the rating chart nee
 
 
 void mainWindow::updateTeamInfo(size_t teamIndex) { //a slot that updates teams info on the UI when it is edited
-    ui->teamNameLabel->setText(QString::fromUtf8((*teamSet.get())->teamSet[teamIndex].name)); //update values on team info label
-    ui->ratingView->setText(QString::number((*teamSet.get())->teamSet[teamIndex].rating));
-    ui->ratingDevView->setText(QString::number((*teamSet.get())->teamSet[teamIndex].RD));
-    ui->volView->setText(QString::number((*teamSet.get())->teamSet[teamIndex].volatility));
-    ui->matWonView->setText(QString::number((*teamSet.get())->teamSet[teamIndex].matchWonCount));
-    ui->matDrawnView->setText(QString::number((*teamSet.get())->teamSet[teamIndex].matchDrawnCount));
-    ui->matLostView->setText(QString::number((*teamSet.get())->teamSet[teamIndex].matchLostCount));
+    ui->teamNameLabel->setText(QString::fromUtf8((*teamSet)->teamSet[teamIndex].name)); //update values on team info label
+    ui->ratingView->setText(QString::number((*teamSet)->teamSet[teamIndex].rating));
+    ui->ratingDevView->setText(QString::number((*teamSet)->teamSet[teamIndex].RD));
+    ui->volView->setText(QString::number((*teamSet)->teamSet[teamIndex].volatility));
+    ui->matWonView->setText(QString::number((*teamSet)->teamSet[teamIndex].matchWonCount));
+    ui->matDrawnView->setText(QString::number((*teamSet)->teamSet[teamIndex].matchDrawnCount));
+    ui->matLostView->setText(QString::number((*teamSet)->teamSet[teamIndex].matchLostCount));
     newTeamSelected(teamIndex);
 }
 
 void mainWindow::newTeamSelected(size_t teamIndex) { // a function to run to update the rating history chart when a team is selected
-    ui->rateHistoryView->xAxis->setRange(0, (*teamSet.get())->teamSet[teamIndex].rateHistx.size());
-    ui->rateHistoryView->yAxis->setRange(0,(*teamSet.get())->teamSet[teamIndex].getHighestRateHist() * 1.3);
-    ui->rateHistoryView->xAxis->setLabel(QString::fromUtf8((*teamSet.get())->teamSet[teamIndex].name));
-    ui->rateHistoryView->graph(0)->setData((*teamSet.get())->teamSet[teamIndex].rateHistx, (*teamSet.get())->teamSet[teamIndex].rateHisty);
+    ui->rateHistoryView->xAxis->setRange(1, (*teamSet)->teamSet[teamIndex].rateHistx.size());
+    ui->rateHistoryView->yAxis->setRange(0,(*teamSet)->teamSet[teamIndex].getHighestRateHist() * 1.3);
+    ui->rateHistoryView->xAxis->setLabel(QString::fromUtf8((*teamSet)->teamSet[teamIndex].name));
+    ui->rateHistoryView->graph(0)->setData((*teamSet)->teamSet[teamIndex].rateHistx, (*teamSet)->teamSet[teamIndex].rateHisty);
     ui->rateHistoryView->replot();
 }
 

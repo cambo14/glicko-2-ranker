@@ -3,10 +3,10 @@
 
 #ifndef _TEAMLISTTABLEITEM_H_
 #define _TEAMLISTTABLEITEM_H_
-#include <QTableWidgetItem>
-#include <QLabel>
-#include <QPushButton>
-#include <QLayout>
+#include <QtWidgets/QTableWidgetItem>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QLayout>
 #include <iostream>
 #include <memory>
 #include "glicko2TeamSet.h"

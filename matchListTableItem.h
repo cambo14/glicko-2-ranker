@@ -4,7 +4,7 @@
 #ifndef _MATCHLISTTABLEITEM_H_
 #define _MATCHLISTTABLEITEM_H_
 
-#include <QPushButton>
+#include <QtWidgets/QPushButton>
 #include <memory>
 #include "glicko2TeamSet.h"
 

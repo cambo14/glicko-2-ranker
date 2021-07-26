@@ -797,8 +797,6 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
-    <addaction name="actionNew"/>
-    <addaction name="actionSave"/>
     <addaction name="actionSave_As"/>
    </widget>
    <widget class="QMenu" name="menuHelp">

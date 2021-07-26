@@ -4,8 +4,8 @@
 #ifndef _TEAMLISTTABLE_H_
 #define _TEAMLISTTABLE_H_
 
-#include <QTableWidget>
-#include <QPushButton>
+#include <QtWidgets/QTableWidget>
+#include <QtWidgets/QPushButton>
 #include "teamListTableItem.h"
 
 /*

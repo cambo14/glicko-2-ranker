@@ -27,9 +27,9 @@ void actionHandler::newTeam() { //a slot to run when an action that results in a
 bool actionHandler::nonFatalErrorEncountered(std::string name, std::string description) //a function to display an error message when an error is encountered. Will return true if the user decides to continue and false if the user saves and quits
 {
 	nonFatalErrorDialog* errorDialog = new nonFatalErrorDialog(parent, name, description);
-	errorDialog->exec();
 	QObject::connect(errorDialog, &nonFatalErrorDialog::continueUnsafe, this, [&]() {errorDialog->deleteLater(); return true; });
-	QObject::connect(errorDialog, &nonFatalErrorDialog::saveAndQuit, this, [&]() {errorDialog->deleteLater(); return true; });
+	QObject::connect(errorDialog, &nonFatalErrorDialog::saveAndQuit, this, [&]() {emit onSaveAndQuit(); return false; });
+	errorDialog->exec();
 	return true;
 }
 
@@ -46,13 +46,16 @@ void actionHandler::newMatch() //a slot to run when an action that results in a 
 {
 	emit sysValsNeedUpdate();
 	if ((*teamSet)->teamSet.size() < 2) { //check that there are enough teams to create a match
-		nonFatalErrorDialog errorDialog(parent, "not enough teams", "you need at least two teams in the teamset to create a match.");
-		errorDialog.exec();
+		nonFatalErrorDialog* errorDialog = new nonFatalErrorDialog(parent, "not enough teams", "you need at least two teams in the teamset to create a match.");
+		QObject::connect(errorDialog, &nonFatalErrorDialog::continueUnsafe, this, [&]() {errorDialog->deleteLater(); return; });
+		QObject::connect(errorDialog, &nonFatalErrorDialog::saveAndQuit, this, [&]() {emit onSaveAndQuit(); return; });
+		errorDialog->exec();
 		return;
 	}
 	addMatchDialog addMatch(parent);
 	addMatch.init(teamSet);
 	QObject::connect(&addMatch, &addMatchDialog::matchSubmitted, this, &actionHandler::newMatchAdded);
+	QObject::connect(&addMatch, &addMatchDialog::saveAndQuit, this, [&]() {emit onSaveAndQuit(); });
 	addMatch.exec();
 	addMatch.deleteLater();
 }

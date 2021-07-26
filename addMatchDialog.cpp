@@ -2,6 +2,7 @@
 //see license file for more information
 
 #include "addMatchDialog.h"
+#include "nonFatalErrorDialog.h"
 
 addMatchDialog::addMatchDialog(QWidget *parent)
 	: QDialog(parent)
@@ -33,6 +34,14 @@ void addMatchDialog::cancelMatchButtonPressed() //a slot to run when the cancel 
 }
 
 void addMatchDialog::addMatchButtonPressed() { //a slot to run when the add match button on the dialog is pressed
-	emit matchSubmitted(ui.team1Input->currentIndex(), ui.team2Input->currentIndex(), ui.winnerInput->currentIndex());
-	close();
+	if (ui.team1Input->currentIndex() == ui.team2Input->currentIndex()) {
+		nonFatalErrorDialog* errorDialog = new nonFatalErrorDialog(this->parentWidget(), "Invalid team selection", "The two teams selected cannot be the same please make sure you select two different teams when creating a match");
+		QObject::connect(errorDialog, &nonFatalErrorDialog::saveAndQuit, this, [&]() {emit saveAndQuit(); });
+		QObject::connect(errorDialog, &nonFatalErrorDialog::continueUnsafe, this, [&]() {this->cancelMatchButtonPressed(), errorDialog->deleteLater(); });
+		errorDialog->exec();
+	}
+	else {
+		emit matchSubmitted(ui.team1Input->currentIndex(), ui.team2Input->currentIndex(), ui.winnerInput->currentIndex());
+		close();
+	}
 }

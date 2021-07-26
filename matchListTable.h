@@ -4,7 +4,7 @@
 #ifndef _MATCHLISTTABLE_H_
 #define _MATCHLISTTABLE_H_
 
-#include <QTableWidget>
+#include <QtWidgets/QTableWidget>
 #include <vector>
 #include "matchListTableItem.h"
 
